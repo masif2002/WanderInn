@@ -3,6 +3,10 @@ import "./App.css";
 import Layout from "./Layout";
 import { HomePage, LoginPage, RegisterPage } from './pages';
 
+import axios from 'axios';
+
+axios.defaults.baseURL = 'http://localhost:5000'
+
 function App() {
   return (
     <Routes>
