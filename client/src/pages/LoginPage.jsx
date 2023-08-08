@@ -1,9 +1,13 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 import axios from "axios";
+import { useContext } from "react";
+import { UserContext } from "../context/UserContext";
 
 const LoginPage = () => {
+  const { setUser } = useContext(UserContext)
+  const [redirect, setRedirect] = useState(false)
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -24,14 +28,19 @@ const LoginPage = () => {
     try {
       const { data } = await axios.post("/login", formData);
       alert(data.message);
+      setUser(data.user)
+      setRedirect(true)
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
     }
+
+   
   };
 
   return (
     <section className="flex justify-center items-center grow">
+      {redirect && <Navigate to='/' />}
       <div className="-mt-32">
         <h1 className="text-3xl text-center uppercase font-bold mb-4">Login</h1>
         <form className="max-w-md" onSubmit={handleSubmit}>
