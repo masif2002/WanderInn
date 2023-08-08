@@ -67,10 +67,14 @@ app.post('/login', async (req, res) => {
     // Sign JWT Token
     jwt.sign({_id, name, email}, jwtSecret, function(err, token) {
       if (err) throw err
-      return res.cookie('token', token).json({message: "Authentication successful"})
+
+      
+      return res.cookie('token', token).json({ user, message: "Authentication successful"})
     })
 
+    
   } catch (e) {
+    // throw err is caught here
     console.log(e);
     res.status(422).json({message: "Something went wrong! Please try again later"})
   }
