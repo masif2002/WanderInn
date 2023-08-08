@@ -20,7 +20,7 @@ app.use(cors({
   
 
 app.get('/', (req, res) => {
-    return res.json("Hello World")
+    res.json("Hello World")
 })
 
 app.post('/register', async (req, res) => {
@@ -35,12 +35,33 @@ app.post('/register', async (req, res) => {
       email,
       password: hashedPassword
     });
-    return res.json(userDoc)
+    res.json(userDoc)
 
   } catch (err) {
-    return res.status(422).json(err)
+    res.status(422).json(err)
   }
-    
+})
+
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body
+
+  try {
+    let user = await User.find({ email })
+   
+
+    if (user.length == 0) res.status(404).json({message: "Invalid Credentials" })
+
+    else {
+      const passwordMatch = bcrypt.compareSync(password, user[0].password)
+      if (!passwordMatch) res.status(401).json({message: "Invalid Credentials"})
+    } 
+
+    res.json({message: "Autentication successful"})
+
+  } catch (e) {
+    console.log(e);
+    res.status(404).json(e)
+  }
 
 })
 
