@@ -4,6 +4,7 @@ const User = require('./models/User.js')
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt') 
 const jwt = require('jsonwebtoken')
+const cookieParser = require('cookie-parser')
 
 require('dotenv').config()
 
@@ -21,6 +22,7 @@ app.use(cors({
     credentials: true // Sets Access-Control-Allow-Credentials Headers
   }))
   
+app.use(cookieParser())
 
 app.get('/', (req, res) => {
     res.json("Hello World")
@@ -65,11 +67,11 @@ app.post('/login', async (req, res) => {
     } 
 
     // Sign JWT Token
-    jwt.sign({_id, name, email}, jwtSecret, function(err, token) {
+    jwt.sign({_id}, jwtSecret, function(err, token) {
       if (err) throw err
 
       
-      return res.cookie('token', token).json({ user, message: "Authentication successful"})
+      return res.cookie('token', token).json({ _id, name, email, message: "Authentication successful"})
     })
 
     
@@ -77,6 +79,22 @@ app.post('/login', async (req, res) => {
     // throw err is caught here
     console.log(e);
     res.status(422).json({message: "Something went wrong! Please try again later"})
+  }
+
+})
+
+app.get('/profile', async (req, res) => {
+  const { token } = req.cookies
+
+  try {
+    const { _id } = jwt.verify(token, jwtSecret)
+    const { email, name } = await User.findById(_id)
+    
+    return res.json({ _id, name, email })
+
+  } catch(err) {  
+    console.log(err)
+    return res.status(422).json({message: "Invalid Token"})
   }
 
 })

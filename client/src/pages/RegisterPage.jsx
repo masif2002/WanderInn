@@ -43,7 +43,7 @@ const RegisterPage = () => {
           <input type="password" name="password" placeholder="password" value={formData.password} onChange={handleChange}/>
           <button className="bg-primary p-2 rounded-3xl text-white w-full">Register</button>
           <p className="text-center my-2">
-            Already have an account?<Link to="/login" className="text-primary text-underline">Login
+            Already have an account? <Link to="/login" className="text-primary text-underline">Login
             </Link>
           </p>
         </form>

@@ -27,8 +27,9 @@ const LoginPage = () => {
 
     try {
       const { data } = await axios.post("/login", formData);
+      const { _id, name, email } = data
       alert(data.message);
-      setUser(data.user)
+      setUser({_id, name, email})
       setRedirect(true)
     } catch (error) {
       console.log(error);
