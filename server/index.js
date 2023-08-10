@@ -86,16 +86,20 @@ app.post('/login', async (req, res) => {
 app.get('/profile', async (req, res) => {
   const { token } = req.cookies
 
-  try {
-    const { _id } = jwt.verify(token, jwtSecret)
-    const { email, name } = await User.findById(_id)
-    
-    return res.json({ _id, name, email })
-
-  } catch(err) {  
-    console.log(err)
-    return res.status(422).json({message: "Invalid Token"})
+  if(token) {
+    try {
+      const { _id } = jwt.verify(token, jwtSecret)
+      const { email, name } = await User.findById(_id)
+      
+      return res.json({ _id, name, email })
+  
+    } catch(err) {  
+      console.log(err)
+      return res.status(422).json({message: "Invalid Token"})
+    }
   }
+
+  return res.json(null)
 
 })
 
