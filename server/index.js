@@ -103,4 +103,8 @@ app.get('/profile', async (req, res) => {
 
 })
 
+app.get('/logout', (req, res) => {
+  res.cookie('token', '').json({message: "Logged out"})
+})
+
 app.listen(5000, () => console.log('Server listening on port 5000...'))
