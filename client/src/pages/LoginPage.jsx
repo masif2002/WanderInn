@@ -1,17 +1,13 @@
-import React, { useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import React, { useState, useContext, useEffect } from "react";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
-import axios from "axios";
-import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
+import axios from "axios";
 
 const LoginPage = () => {
-  const { setUser } = useContext(UserContext)
-  const [redirect, setRedirect] = useState(false)
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const navigate = useNavigate()
+  const { user, setUser, fetchingUser } = useContext(UserContext)
+  const [formData, setFormData] = useState({ email: "", password: "" });
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -30,7 +26,7 @@ const LoginPage = () => {
       const { _id, name, email } = data
       alert(data.message);
       setUser({_id, name, email})
-      setRedirect(true)
+      navigate('/')
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
@@ -39,9 +35,16 @@ const LoginPage = () => {
    
   };
 
+  if (fetchingUser) {
+    // Fetching state of user, if logged in or not
+    return <h1>Loading ...</h1>
+  } else if (user) {
+    // If user already logged in 
+    return <Navigate to={'/profile'} />
+  }
+
   return (
     <section className="flex justify-center items-center grow">
-      {redirect && <Navigate to='/' />}
       <div className="-mt-32">
         <h1 className="text-3xl text-center uppercase font-bold mb-4">Login</h1>
         <form className="max-w-md" onSubmit={handleSubmit}>

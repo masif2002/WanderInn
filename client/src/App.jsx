@@ -1,7 +1,14 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import Layout from "./Layout";
-import { HomePage, LoginPage, RegisterPage } from "./pages";
+import { MainLayout, ProfileLayout } from "./layouts";
+import {
+  HomePage,
+  LoginPage,
+  RegisterPage,
+  ProfilePage,
+  BookingsPage,
+  AccomodationsPage,
+} from "./pages";
 
 import axios from "axios";
 import { UserContextProvider } from "./context/UserContext";
@@ -14,10 +21,15 @@ function App() {
   return (
     <UserContextProvider>
       <Routes>
-        <Route path="/" element={<Layout />}>
+        <Route path="/" element={<MainLayout />}>
           <Route index element={<HomePage />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
+          <Route path="profile" element={<ProfileLayout />}>
+            <Route index element={<ProfilePage/>}/>
+            <Route path="bookings" element={<BookingsPage />} />
+            <Route path="accomodations" element={<AccomodationsPage />} />
+          </Route>
         </Route>
       </Routes>
     </UserContextProvider>

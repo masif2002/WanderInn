@@ -32,7 +32,7 @@ export default function Header() {
       </div>
 
       {/* User Profile */}
-      <Link to='/login' className="flex items-center gap-1 rounded-3xl px-4 py-2 border border-gray-300">
+      <Link to={user ? '/profile' : '/login'} className="flex items-center gap-1 rounded-3xl px-4 py-2 border border-gray-300">
           <RxHamburgerMenu className="h-4 w-4" />
           <BiSolidUserCircle className="h-6 w-6 text-primary" />
           {user && <p className="text-sm">{user.name}</p>}

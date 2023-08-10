@@ -1,5 +1,8 @@
 import HomePage from "./HomePage";
 import LoginPage from "./LoginPage";
 import RegisterPage from "./RegisterPage";
+import ProfilePage from "./ProfilePage";
+import BookingsPage from "./BookingsPage";
+import AccomodationsPage from "./AccomodationsPage";
 
-export { HomePage, LoginPage, RegisterPage }
+export { HomePage, LoginPage, RegisterPage, ProfilePage, BookingsPage, AccomodationsPage }
