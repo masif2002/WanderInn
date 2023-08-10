@@ -9,7 +9,7 @@ const ProfilePage = () => {
   const navigate = useNavigate()
 
   const handleLogout = async () => {
-    const { data } = await axios.get('/logout')
+    const { data } = await axios.post('/logout')
     setUser(null)
     alert(data.message)
     navigate('/login')
