@@ -5,6 +5,7 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcrypt') 
 const jwt = require('jsonwebtoken')
 const cookieParser = require('cookie-parser')
+const download = require('image-downloader')
 
 require('dotenv').config()
 
@@ -12,6 +13,7 @@ const app = express()
 
 const databaseURL = process.env.MONGO_CONNECTION_URL
 const jwtSecret = process.env.JWT_SECRET_KEY
+const staticURL = '/photos'
 
 mongoose.connect(databaseURL)
 
@@ -23,6 +25,8 @@ app.use(cors({
   }))
   
 app.use(cookieParser())
+
+app.use(staticURL, express.static('uploads'))
 
 app.get('/', (req, res) => {
     res.json("Hello World")
@@ -106,5 +110,29 @@ app.get('/profile', async (req, res) => {
 app.post('/logout', (req, res) => {
   res.cookie('token', '').json({message: "Logged out"})
 })
+
+
+app.post('/upload-by-link', (req, res) => {
+  const { link } = req.body
+
+  download.image({
+    url: link,
+    dest: __dirname + '/uploads'
+  })
+  .then(({ filename }) => {
+    // Getting only file name instead of full path
+    let onlyFileName = filename.split('/uploads')
+    onlyFileName = staticURL + onlyFileName[1]
+
+    return res.json({filename: onlyFileName});
+  })
+  .catch((err) => {
+    console.log(err)
+    res.status(500).json({Error: err})
+  })
+
+})
+
+
 
 app.listen(5000, () => console.log('Server listening on port 5000...'))
