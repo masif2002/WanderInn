@@ -2,8 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-input[type='text'], input[type='email'], input[type='password'] {
-    @apply rounded-3xl px-4 py-2 border border-gray-400 focus:outline-1 outline-gray-300 w-full my-1;
+input[type='text'], input[type='email'], input[type='password'], textarea {
+    @apply px-4 py-2 border border-gray-400 focus:outline-1 outline-gray-300 w-full my-1;
 }
 
 button.primary {

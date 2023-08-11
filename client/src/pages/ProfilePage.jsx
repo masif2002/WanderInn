@@ -12,7 +12,7 @@ const ProfilePage = () => {
     const { data } = await axios.post('/logout')
     setUser(null)
     alert(data.message)
-    navigate('/login')
+    navigate('/')
   }
 
   return (
