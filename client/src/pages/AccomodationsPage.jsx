@@ -29,18 +29,37 @@ const AccomodationsPage = () => {
   const [photoLink, setPhotoLink] = useState('')
   const [uploadedPhotos, setUploadedPhotos] = useState([])
 
-  const addPhotoByLink = async (ev) => {
+  const addPhotoByLink = (ev) => {
     ev.preventDefault()
 
     axios.post('/upload-by-link', {link: photoLink})
     .then(({ data }) => {
-        let newURL = axios.defaults.baseURL + data.filename
+        let newURL = axios.defaults.baseURL + '/' + data.filename
         setUploadedPhotos((prev) => [...prev, newURL])
         setPhotoLink('')
     })
     .catch((err) => {
         alert("Oops! Something went wrong!")
         console.log(err);
+    })
+
+  }
+
+  const uploadPhoto = async (ev) => {
+    const { files } = ev.target
+   
+    const form = new FormData()
+    form.append('files', files[0])
+
+    axios.post('upload-photos', form)
+    .then(({ data }) => {
+      const newPhotos = data.map((URL) => axios.defaults.baseURL + URL)
+      console.log(newPhotos)
+      setUploadedPhotos((prev) => [...prev, ...newPhotos])
+    })
+    .catch((err) => {
+      console.log(err);
+      alert("Something went wrong!")
     })
 
   }
@@ -62,7 +81,7 @@ const AccomodationsPage = () => {
             <form className="mt-10 py-5 px-10 max-w-3xl mx-auto mb-64">
                 
                 <FormInput label='Title' subText='Text that is displayed to the users on the front page' />
-                <FormInput label='Description' subText='Description of the place, the ambience, nearby stores, etc... ' />
+                <FormInput label='Description' subText='Description of the place, the ambience, nearby stores, etc... ' textBox={true} />
                 <FormInput label='Address' subText='Address of the place and some nearby popular landmarks if any' />
 
                 {/* Photos */}
@@ -88,10 +107,11 @@ const AccomodationsPage = () => {
                             <img key={index} src={url} alt="upload" className="rounded-3xl w-full object-cover h-32 " />
                         )}
                            
-                        <button className=" gap-2 flex justify-center items-center border border-gray-400 rounded-3xl text-gray-800 min-h-[100px]">
+                        <label className="cursor-pointer flex justify-center items-center gap-2 border border-gray-400 rounded-3xl text-gray-800 min-h-[100px]">
+                            <input type="file" className="hidden" multiple onChange={uploadPhoto} />
                             <FiUpload className="h-5 w-5"/>
                             <p >Upload Photos</p>
-                        </button>
+                        </label>
                     </div>
                 </div>
 

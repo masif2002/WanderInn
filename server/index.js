@@ -6,10 +6,13 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const cookieParser = require('cookie-parser')
 const download = require('image-downloader')
+const multer = require('multer')
+const fs = require('fs')
 
 require('dotenv').config()
 
 const app = express()
+const upload = multer({dest: 'uploads/'})
 
 const databaseURL = process.env.MONGO_CONNECTION_URL
 const jwtSecret = process.env.JWT_SECRET_KEY
@@ -120,17 +123,39 @@ app.post('/upload-by-link', (req, res) => {
     dest: __dirname + '/uploads'
   })
   .then(({ filename }) => {
-    // Getting only file name instead of full path
-    let onlyFileName = filename.split('/uploads')
-    onlyFileName = staticURL + onlyFileName[1]
 
-    return res.json({filename: onlyFileName});
+    // Getting only file name instead of full path
+    let onlyFileName = filename.split('/uploads/')
+
+    // Renaming file
+    let newFileName =  'uploads/' +  Date.now() + onlyFileName[1]
+    fs.renameSync(filename, newFileName)
+
+
+    return res.json({filename: newFileName.replace('uploads', 'photos')});
   })
   .catch((err) => {
     console.log(err)
     res.status(500).json({Error: err})
   })
 
+})
+
+app.post('/upload-photos', upload.array('files'), (req, res) => {
+  const { files } = req
+  const uploadedURL = []
+
+  files.forEach(({path, originalname}) => {
+    let newFileName = Date.now() + originalname
+    fs.renameSync(path, `uploads/${newFileName}`)
+
+    let URL = '/photos/' + newFileName
+    uploadedURL.push(URL)
+  })
+
+  
+
+  res.status(200).json(uploadedURL)
 })
 
 
