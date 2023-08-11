@@ -6,6 +6,8 @@ import { BiSolidParking } from 'react-icons/bi'
 
 import { useNavigate, useParams } from "react-router-dom";
 import { Perk } from '../components'
+import axios from "axios";
+import { useState } from "react";
 
 
 const FormInput = ({ label, subText, textBox=false, placeholder, inputStyle }) => {
@@ -23,6 +25,25 @@ const FormInput = ({ label, subText, textBox=false, placeholder, inputStyle }) =
 const AccomodationsPage = () => {
   const navigate = useNavigate();
   const { action } = useParams();
+
+  const [photoLink, setPhotoLink] = useState('')
+  const [uploadedPhotos, setUploadedPhotos] = useState([])
+
+  const addPhotoByLink = async (ev) => {
+    ev.preventDefault()
+
+    axios.post('/upload-by-link', {link: photoLink})
+    .then(({ data }) => {
+        let newURL = axios.defaults.baseURL + data.filename
+        setUploadedPhotos((prev) => [...prev, newURL])
+        setPhotoLink('')
+    })
+    .catch((err) => {
+        alert("Oops! Something went wrong!")
+        console.log(err);
+    })
+
+  }
 
   return (
     <>
@@ -50,12 +71,24 @@ const AccomodationsPage = () => {
                     <p className="ml-3 text-sm text-gray-400">Nice photos of the place with good lighting and full coverage</p>
                     
                     <div className="flex border border-gray-400 rounded-3xl">
-                        <input type="text" className="border-none focus:outline-none rounded-3xl" placeholder="Photo as URL ..."/>
-                        <button className="bg-primary text-white rounded-tr-3xl rounded-br-3xl w-44">Add Photo</button>
+                        <input 
+                            type="text"
+                            className="border-none focus:outline-none rounded-3xl"
+                            placeholder="Photo as URL ..."
+                            onChange={(e) => setPhotoLink(e.target.value)}
+                            value={photoLink}
+                        />
+                        <button className="bg-primary text-white rounded-tr-3xl rounded-br-3xl w-44" onClick={addPhotoByLink}>Add Photo</button>
                     </div>
 
-                    <div className="grid grid-cols-3">
-                        <button className="mt-3 gap-2 flex justify-center items-center h-32 border border-gray-400 rounded-3xl text-gray-800">
+
+                    <div className="grid grid-cols-3 mt-3 gap-2">
+
+                        {uploadedPhotos.map((url, index) => 
+                            <img key={index} src={url} alt="upload" className="rounded-3xl w-full object-cover h-32 " />
+                        )}
+                           
+                        <button className=" gap-2 flex justify-center items-center border border-gray-400 rounded-3xl text-gray-800 min-h-[100px]">
                             <FiUpload className="h-5 w-5"/>
                             <p >Upload Photos</p>
                         </button>
