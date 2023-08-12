@@ -1,12 +1,10 @@
 import { AiOutlinePlus, AiOutlineWifi, AiOutlineCar } from "react-icons/ai";
-import { FiUpload } from 'react-icons/fi';
 import { MdPets } from 'react-icons/md'
 import { PiSwimmingPoolDuotone, PiTelevisionSimpleLight } from 'react-icons/pi'
 import { BiSolidParking } from 'react-icons/bi'
 
 import { useNavigate, useParams } from "react-router-dom";
-import { Perk } from '../components'
-import axios from "axios";
+import { Perk, PhotoUploader } from '../components'
 import { useState } from "react";
 
 
@@ -50,51 +48,7 @@ const AccomodationsPage = () => {
   const [checkIn, setCheckIn] = useState('')
   const [checkOut, setCheckOut] = useState('')
   const [maxGuests, setMaxGuests] = useState('')
-  
-  const [photoLink, setPhotoLink] = useState('')
-  const [uploadedPhotos, setUploadedPhotos] = useState([])
 
-
-
-  const addPhotoByLink = (ev) => {
-    ev.preventDefault()
-
-    axios.post('/upload-by-link', {link: photoLink})
-    .then(({ data }) => {
-        let newURL = axios.defaults.baseURL + '/' + data.filename
-        setUploadedPhotos((prev) => [...prev, newURL])
-        setPhotoLink('')
-    })
-    .catch((err) => {
-        alert("Oops! Something went wrong!")
-        console.log(err);
-    })
-
-  }
-
-  const uploadPhoto = async (ev) => {
-    const { files } = ev.target
-    console.log("Files", files)
-
-    const form = new FormData()
-    
-    for (let i=0; i<files.length; i++) {
-      form.append('files', files[i])
-    }
-
-      axios.post('upload-photos', form)
-      .then(({ data }) => {
-        const newPhotos = data.map((URL) => axios.defaults.baseURL + URL)
-        console.log(newPhotos)
-        setUploadedPhotos((prev) => [...prev, ...newPhotos])
-      })
-      .catch((err) => {
-        console.log(err);
-        alert("Something went wrong!")
-      })
-
-
-  }
 
   return (
     <>
@@ -133,35 +87,7 @@ const AccomodationsPage = () => {
                  />
 
                 {/* Photos */}
-                <div className="mb-4">
-                    <label htmlFor="" className="font-semibold text-xl ml-3"> Photos</label>
-                    <p className="ml-3 text-sm text-gray-400">Nice photos of the place with good lighting and full coverage</p>
-                    
-                    <div className="flex border border-gray-400 rounded-3xl">
-                        <input 
-                            type="text"
-                            className="border-none focus:outline-none rounded-3xl"
-                            placeholder="Photo as URL ..."
-                            onChange={(e) => setPhotoLink(e.target.value)}
-                            value={photoLink}
-                        />
-                        <button className="bg-primary text-white rounded-tr-3xl rounded-br-3xl w-44" onClick={addPhotoByLink}>Add Photo</button>
-                    </div>
-
-
-                    <div className="grid grid-cols-3 mt-3 gap-2">
-
-                        {uploadedPhotos.map((url, index) => 
-                            <img key={index} src={url} alt="upload" className="rounded-3xl w-full object-cover h-32 " />
-                        )}
-                           
-                        <label className="cursor-pointer flex justify-center items-center gap-2 border border-gray-400 rounded-3xl text-gray-800 min-h-[100px]">
-                            <input type="file" className="hidden" multiple onChange={uploadPhoto} />
-                            <FiUpload className="h-5 w-5"/>
-                            <p >Upload Photos</p>
-                        </label>
-                    </div>
-                </div>
+                <PhotoUploader />
 
                 {/* Perks */}
                 <div className="mb-4">
@@ -170,12 +96,12 @@ const AccomodationsPage = () => {
 
                     <div className="grid grid-cols-3 gap-2">
 
-                        <Perk name="wifi" Icon={AiOutlineWifi} />
-                        <Perk name="parking" Icon={BiSolidParking} />
-                        <Perk name="pets" Icon={MdPets} />
-                        <Perk name="Swimming pool" Icon={PiSwimmingPoolDuotone} />
-                        <Perk name="TV" Icon={PiTelevisionSimpleLight} />
-                        <Perk name="valet" Icon={AiOutlineCar} />
+                        <Perk name="wifi" Icon={AiOutlineWifi} choosePerk={setPerks}/>
+                        <Perk name="parking" Icon={BiSolidParking} choosePerk={setPerks}/>
+                        <Perk name="pets" Icon={MdPets} choosePerk={setPerks}/>
+                        <Perk name="Swimming pool" Icon={PiSwimmingPoolDuotone} choosePerk={setPerks}/>
+                        <Perk name="TV" Icon={PiTelevisionSimpleLight} choosePerk={setPerks}/>
+                        <Perk name="valet" Icon={AiOutlineCar} choosePerk={setPerks}/>
                        
                     </div>
                 </div>
@@ -223,10 +149,6 @@ const AccomodationsPage = () => {
                 <button className="primary hover:opacity-80">
                     Save
                 </button>
-
-
-
-                
 
             </form>
         )

@@ -12,11 +12,10 @@ const fs = require('fs')
 require('dotenv').config()
 
 const app = express()
-const upload = multer({dest: 'uploads/'})
+const photosMiddleware = multer({dest: 'uploads/'})
 
 const databaseURL = process.env.MONGO_CONNECTION_URL
 const jwtSecret = process.env.JWT_SECRET_KEY
-const staticURL = '/photos'
 
 mongoose.connect(databaseURL)
 
@@ -29,7 +28,7 @@ app.use(cors({
   
 app.use(cookieParser())
 
-app.use(staticURL, express.static('uploads'))
+app.use('/photos', express.static('uploads'))
 
 app.get('/', (req, res) => {
     res.json("Hello World")
@@ -141,10 +140,14 @@ app.post('/upload-by-link', (req, res) => {
 
 })
 
-app.post('/upload-photos', upload.array('files'), (req, res) => {
+app.post('/upload-photos', photosMiddleware.array('files[]'), (req, res) => {
+  // Job of the middleware function used is to download photos
+
+  // Getting files from request (req.files) | Not a middleware operation
   const { files } = req
   const uploadedURL = []
 
+  // Renaming Files and sending the path to files
   files.forEach(({path, originalname}) => {
     let newFileName = Date.now() + originalname
     fs.renameSync(path, `uploads/${newFileName}`)
