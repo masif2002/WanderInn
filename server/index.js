@@ -161,7 +161,30 @@ app.post('/upload-photos', photosMiddleware.array('files[]'), (req, res) => {
   res.status(200).json(uploadedURL)
 })
 
-app.post('/addplace', (req, res) => {
+
+app.get('/places', async (req, res) => {
+  const { token } = req.cookies
+
+  if (!token) return res.status(401).json({message: "Please log in!"})
+  
+  let id;
+
+  try {
+    const {_id} = jwt.verify(token, jwtSecret)
+    id = _id
+  } catch (err) {
+    console.log(err)
+    return res.status(422).json({message: "Invalid Token"})
+  }
+
+  const places = await Accomodation.find({ owner: id })
+
+  return res.json(places)
+
+
+})
+
+app.post('/place', (req, res) => {
   const { title, description, address, photos, perks, extraInfo, checkIn, checkOut, maxGuests} = req.body
 
   const { token } = req.cookies
@@ -186,7 +209,7 @@ app.post('/addplace', (req, res) => {
   })
 })
 
-app.put('/updateplace', async (req, res) => {
+app.put('/place', async (req, res) => {
   const { id, title, description, address, photos, perks, extraInfo, checkIn, checkOut, maxGuests} = req.body
 
   // Verify Token here 
@@ -198,27 +221,6 @@ app.put('/updateplace', async (req, res) => {
   res.json({message: 'Doc updated'})
 })
 
-app.get('/places', async (req, res) => {
-  const { token } = req.cookies
-
-  if (!token) return res.status(401).json({message: "Please log in!"})
-  
-  let id;
-
-  try {
-    const {_id} = jwt.verify(token, jwtSecret)
-    id = _id
-  } catch (err) {
-    console.log(err)
-    return res.status(422).json({message: "Invalid Token"})
-  }
-
-  const places = await Accomodation.find({ owner: id })
-
-  return res.json(places)
-
-
-})
 
 app.get('/place/:id', async (req, res) => {
   const { id } = req.params

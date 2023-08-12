@@ -73,16 +73,16 @@ const AddAccomodationPage = () => {
     const [uploadedPhotos, setUploadedPhotos] = useState([])
     
     const handleSubmit = (ev) => {
-      if (!id) addNewPlace(ev)
-      
-      updatePlace(ev)
+      ev.preventDefault()
 
+      if (!id) return addNewPlace()
+      
+      updatePlace()
     }
 
-    const addNewPlace = (ev) => {
-      ev.preventDefault()
+    const addNewPlace = () => {
       
-      axios.post('/addplace', {
+      axios.post('/place', {
         title, description, address, perks, extraInfo, checkIn, checkOut, maxGuests, photos: uploadedPhotos
       })
       .then(() => {
@@ -96,10 +96,9 @@ const AddAccomodationPage = () => {
   
     }
 
-    const updatePlace = (ev) => {
-      ev.preventDefault()
+    const updatePlace = () => {
 
-      axios.put('/updateplace', {
+      axios.put('/place', {
         id, title, description, address, perks, extraInfo, checkIn, checkOut, maxGuests, photos: uploadedPhotos
       })
         .then(() => {

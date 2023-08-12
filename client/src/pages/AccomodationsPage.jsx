@@ -1,20 +1,15 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AiOutlinePlus } from "react-icons/ai";
 import axios from 'axios';
 
 const Accomodation = ({ place }) => {
-  const navigate = useNavigate()
-
-  const editPlace = (id) => {
-    navigate(`./${id}`)
-  }
 
   const { _id: id, title, description, photos } = place
   return (
-    <div 
+    <Link
+      to={`./${id}`} 
       className="flex gap-5 p-8 bg-gray-200 rounded-2xl cursor-pointer"
-      onClick={() => editPlace(id)}
     >
       <img src={photos[0]} alt="" className="h-32 w-60 object-cover rounded-lg shrink-0" />
       <div>
@@ -25,15 +20,15 @@ const Accomodation = ({ place }) => {
               title
           }
         </h1>
-        <p className="mt-4">
+        <p className="mt-2 text-sm">
           {
-            description.length > 100 ? 
-              description.slice(0, 150) + '...' :
+            description.length > 250 ? 
+              description.slice(0, 250) + '...' :
               description
           }
         </p>
       </div>
-    </div>
+    </Link>
   )
 }
 
@@ -62,7 +57,7 @@ const AccomodationsPage = () => {
         </button>
 
         <div className="flex flex-col gap-5 max-w-3xl mx-auto mt-6">
-          {places?.map((place) => <Accomodation place={place} />)}
+          {places?.map((place) => <Accomodation key={place._id} place={place} />)}
         </div>
 
        
