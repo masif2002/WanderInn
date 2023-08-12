@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const { Schema, Model } = mongoose
+const { Schema } = mongoose
 
 const AccomodationSchema = new Schema ({
     title: String,
@@ -13,6 +13,6 @@ const AccomodationSchema = new Schema ({
     maxGuests: Number
 })
 
-const AccomodationModel = new Model ('Accomodation', AccomodationSchema)
+const AccomodationModel = mongoose.model('Accomodation', AccomodationSchema)
 
 module.exports = AccomodationModel

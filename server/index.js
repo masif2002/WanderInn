@@ -1,6 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const User = require('./models/User.js')
+const Accomodation = require('./models/Accomodation.js')
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt') 
 const jwt = require('jsonwebtoken')
@@ -155,10 +156,22 @@ app.post('/upload-photos', photosMiddleware.array('files[]'), (req, res) => {
     let URL = '/photos/' + newFileName
     uploadedURL.push(URL)
   })
-
   
-
   res.status(200).json(uploadedURL)
+})
+
+app.post('/addplace', (req, res) => {
+  const { title, description, address, photos, perks, extraInfo, checkIn, checkOut, maxGuests} = req.body
+
+  const newPlace = new Accomodation({
+    title, description, address, photos, perks, extraInfo, checkIn, checkOut, maxGuests
+  })
+
+  newPlace.save()
+  .then((placeDoc) => res.json(placeDoc))
+  .catch((err) => {
+    res.status(500).json({message: "Something went wrong!"})
+  })
 })
 
 

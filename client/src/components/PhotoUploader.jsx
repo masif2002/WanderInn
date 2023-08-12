@@ -3,10 +3,10 @@ import { FiUpload } from 'react-icons/fi';
 
 import axios from "axios";
 
-const PhotoUploader = () => {
+const PhotoUploader = ({ uploadedPhotos, setUploadedPhotos }) => {
       
   const [photoLink, setPhotoLink] = useState('')
-  const [uploadedPhotos, setUploadedPhotos] = useState([])
+  
 
     const addPhotoByLink = (ev) => {
         ev.preventDefault()
