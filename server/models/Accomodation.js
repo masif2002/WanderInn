@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose
 
 const AccomodationSchema = new Schema ({
+    owner: String,
     title: String,
     description: String,
     address: String, 

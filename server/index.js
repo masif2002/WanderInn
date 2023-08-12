@@ -163,12 +163,23 @@ app.post('/upload-photos', photosMiddleware.array('files[]'), (req, res) => {
 app.post('/addplace', (req, res) => {
   const { title, description, address, photos, perks, extraInfo, checkIn, checkOut, maxGuests} = req.body
 
+  const { token } = req.cookies
+  if (!token) return res.status(401).json({message: "Please log in"})
+  
+  try {
+    var { _id } = jwt.verify(token, jwtSecret)
+  }
+  catch(err) {  
+    console.log(err)
+    return res.status(422).json({message: "Invalid Token"})
+  }
+
   const newPlace = new Accomodation({
-    title, description, address, photos, perks, extraInfo, checkIn, checkOut, maxGuests
+    owner:_id, title, description, address, photos, perks, extraInfo, checkIn, checkOut, maxGuests
   })
 
   newPlace.save()
-  .then((placeDoc) => res.json(placeDoc))
+  .then((placeDoc) => res.json(placeDoc)) 
   .catch((err) => {
     res.status(500).json({message: "Something went wrong!"})
   })
