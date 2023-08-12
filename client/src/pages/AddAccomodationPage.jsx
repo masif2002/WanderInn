@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react'
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 import { AiOutlineWifi, AiOutlineCar } from "react-icons/ai";
@@ -26,6 +26,7 @@ const FormInput = ({ label, subText, textBox=false, placeholder, inputStyle, val
               />}
             {textBox && 
               <textarea 
+                rows={5}
                 className="rounded-lg" 
                 value={value}
                 onChange={(ev) => {
@@ -39,6 +40,27 @@ const FormInput = ({ label, subText, textBox=false, placeholder, inputStyle, val
 
 const AddAccomodationPage = () => {
     const navigate = useNavigate();
+    const { id } = useParams() // id of the current place (if existing)
+
+    
+    useEffect(() => {
+      if (!id) return
+      
+      // retrieve and set details of place for edit 
+      axios.get(`/place/${id}`)
+        .then(({ data: { placeDoc } }) => {
+          const { title, description, address, perks, extraInfo, checkIn, checkOut, maxGuests, photos } = placeDoc
+          setTitle(title)
+          setDescription(description)
+          setAddress(address)
+          setPerks(perks)
+          setExtraInfo(extraInfo)
+          setCheckIn(checkIn)
+          setCheckOut(checkOut)
+          setMaxGuests(maxGuests)
+          setUploadedPhotos(photos)
+        })
+    }, [])
   
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
@@ -49,10 +71,17 @@ const AddAccomodationPage = () => {
     const [checkOut, setCheckOut] = useState('')
     const [maxGuests, setMaxGuests] = useState('')
     const [uploadedPhotos, setUploadedPhotos] = useState([])
-  
+    
+    const handleSubmit = (ev) => {
+      if (!id) addNewPlace(ev)
+      
+      updatePlace(ev)
+
+    }
+
     const addNewPlace = (ev) => {
       ev.preventDefault()
-  
+      
       axios.post('/addplace', {
         title, description, address, perks, extraInfo, checkIn, checkOut, maxGuests, photos: uploadedPhotos
       })
@@ -66,12 +95,28 @@ const AddAccomodationPage = () => {
       })
   
     }
+
+    const updatePlace = (ev) => {
+      ev.preventDefault()
+
+      axios.put('/updateplace', {
+        id, title, description, address, perks, extraInfo, checkIn, checkOut, maxGuests, photos: uploadedPhotos
+      })
+        .then(() => {
+          alert('Place updated')
+          navigate('..', { relative: "path" })
+        })
+        .catch((err) => {
+          console.log(err)
+          alert("Oops! Something went wrong!")
+        })
+    }
   
   
     return (
       <>
 
-        <form className="mt-10 py-5 px-10 max-w-3xl mx-auto mb-64" onSubmit={addNewPlace}>
+        <form className="mt-10 py-5 px-10 max-w-3xl mx-auto mb-64" onSubmit={handleSubmit}>
             
             <FormInput 
             label='Title' 
@@ -103,12 +148,12 @@ const AddAccomodationPage = () => {
 
                 <div className="grid grid-cols-3 gap-2">
 
-                    <Perk name="wifi" Icon={AiOutlineWifi} choosePerk={setPerks}/>
-                    <Perk name="parking" Icon={BiSolidParking} choosePerk={setPerks}/>
-                    <Perk name="pets" Icon={MdPets} choosePerk={setPerks}/>
-                    <Perk name="Swimming pool" Icon={PiSwimmingPoolDuotone} choosePerk={setPerks}/>
-                    <Perk name="TV" Icon={PiTelevisionSimpleLight} choosePerk={setPerks}/>
-                    <Perk name="valet" Icon={AiOutlineCar} choosePerk={setPerks}/>
+                    <Perk name="wifi" Icon={AiOutlineWifi} allPerks={perks} choosePerk={setPerks}/>
+                    <Perk name="parking" Icon={BiSolidParking} allPerks={perks} choosePerk={setPerks}/>
+                    <Perk name="pets" Icon={MdPets} allPerks={perks} choosePerk={setPerks}/>
+                    <Perk name="Swimming pool" Icon={PiSwimmingPoolDuotone} allPerks={perks} choosePerk={setPerks}/>
+                    <Perk name="TV" Icon={PiTelevisionSimpleLight} allPerks={perks} choosePerk={setPerks}/>
+                    <Perk name="valet" Icon={AiOutlineCar} allPerks={perks} choosePerk={setPerks}/>
                     
                 </div>
             </div>

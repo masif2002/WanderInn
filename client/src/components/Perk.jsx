@@ -1,6 +1,6 @@
 import React from "react";
 
-const Perk = ({ name, Icon, choosePerk }) => {
+const Perk = ({ name, Icon, allPerks, choosePerk }) => {
   return (
     <label
       className="h-16 border border-gray-400 rounded-xl flex items-center px-4"
@@ -10,7 +10,8 @@ const Perk = ({ name, Icon, choosePerk }) => {
         type="checkbox" 
         name={name} 
         id={name} 
-        className="mr-1" 
+        className="mr-1"
+        checked={allPerks.includes(name)}
         onChange={(ev) => {
           ev.target.checked ? 
             choosePerk((selected) => [...selected, name])

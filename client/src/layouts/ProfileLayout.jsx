@@ -18,7 +18,7 @@ const ProfilePage = () => {
   }
 
   return (
-    <section className="mt-10">
+    <section className="mt-10 mb-32">
       <nav className="flex justify-center">
         <NavLink
           to="/profile"

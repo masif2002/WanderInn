@@ -9,6 +9,7 @@ const cookieParser = require('cookie-parser')
 const download = require('image-downloader')
 const multer = require('multer')
 const fs = require('fs')
+const { json } = require('express')
 
 require('dotenv').config()
 
@@ -164,7 +165,7 @@ app.post('/addplace', (req, res) => {
   const { title, description, address, photos, perks, extraInfo, checkIn, checkOut, maxGuests} = req.body
 
   const { token } = req.cookies
-  if (!token) return res.status(401).json({message: "Please log in"})
+  if (!token) return res.status(401).json({message: "Please log in!"})
   
   try {
     var { _id } = jwt.verify(token, jwtSecret)
@@ -183,6 +184,49 @@ app.post('/addplace', (req, res) => {
   .catch((err) => {
     res.status(500).json({message: "Something went wrong!"})
   })
+})
+
+app.put('/updateplace', async (req, res) => {
+  const { id, title, description, address, photos, perks, extraInfo, checkIn, checkOut, maxGuests} = req.body
+
+  // Verify Token here 
+  const placeDoc = await Accomodation.findByIdAndUpdate(
+    id, 
+    { title, description, address, photos, perks, extraInfo, checkIn, checkOut, maxGuests}
+  )
+
+  res.json({message: 'Doc updated'})
+})
+
+app.get('/places', async (req, res) => {
+  const { token } = req.cookies
+
+  if (!token) return res.status(401).json({message: "Please log in!"})
+  
+  let id;
+
+  try {
+    const {_id} = jwt.verify(token, jwtSecret)
+    id = _id
+  } catch (err) {
+    console.log(err)
+    return res.status(422).json({message: "Invalid Token"})
+  }
+
+  const places = await Accomodation.find({ owner: id })
+
+  return res.json(places)
+
+
+})
+
+app.get('/place/:id', async (req, res) => {
+  const { id } = req.params
+  // Verify token logic goes here
+
+  const placeDoc = await Accomodation.findById(id)
+  return res.json({ placeDoc })
+
 })
 
 
