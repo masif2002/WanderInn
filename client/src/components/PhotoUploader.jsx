@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
 import { FiUpload } from 'react-icons/fi';
+import { AiFillStar, AiOutlineStar } from 'react-icons/ai'
+import { BsTrash3Fill } from 'react-icons/bs'
 
 import axios from "axios";
+import { useEffect } from 'react';
 
 const PhotoUploader = ({ uploadedPhotos, setUploadedPhotos }) => {
-      
-  const [photoLink, setPhotoLink] = useState('')
-  
+
+    
+    const [photoLink, setPhotoLink] = useState('')
 
     const addPhotoByLink = (ev) => {
         ev.preventDefault()
@@ -37,6 +40,15 @@ const PhotoUploader = ({ uploadedPhotos, setUploadedPhotos }) => {
             alert("Something went wrong!")
         })
     }
+
+    const removePhoto = (currentPhoto) => {
+        setUploadedPhotos([...uploadedPhotos.filter((photo) => photo !== currentPhoto)])
+    }
+
+    const setCoverPhoto = (currentPhoto) => {
+        setUploadedPhotos([currentPhoto, ...uploadedPhotos.filter((photo) => photo !== currentPhoto)])
+    }
+
   return (
     <>
         <div className="mb-4">
@@ -56,9 +68,22 @@ const PhotoUploader = ({ uploadedPhotos, setUploadedPhotos }) => {
 
 
             <div className="grid grid-cols-3 mt-3 gap-2">
-
+            
                 {uploadedPhotos.map((url) => 
-                    <img key={url} src={url} alt="upload" className="rounded-3xl w-full object-cover h-32 " />
+                    <div className='relative' key={url}>
+                        <img  src={url} alt="upload" className="rounded-3xl w-full object-cover h-32" />
+                        <BsTrash3Fill className=" absolute z-10 top-2 right-2 p-1 bg-white rounded-full h-5 w-5 cursor-pointer" onClick={() => removePhoto(url)} />
+                        
+                        {
+                            url === uploadedPhotos[0] ? 
+                                <AiFillStar className='absolute top-2 left-2 p-1 h-5 w-5 z-10 bg-white rounded-full cursor-pointer'/> 
+                                : 
+                                <AiOutlineStar 
+                                    className='absolute top-2 left-2 p-1 h-5 w-5 z-10 bg-white rounded-full cursor-pointer' 
+                                    onClick={() => setCoverPhoto(url)}
+                                    />
+                        }
+                    </div>
                 )}
                 
                 <label className="cursor-pointer flex justify-center items-center gap-2 border border-gray-400 rounded-3xl text-gray-800 min-h-[100px]">
