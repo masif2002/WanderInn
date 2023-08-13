@@ -20,6 +20,9 @@ const DetailsPage = () => {
   }, [])
 
   if (displayPhotos && details.photos) {
+
+    window.scrollTo(0, 0)
+
     return (
       <div className="bg-white absolute text-black inset-0 min-h-screen py-12">
         <button
@@ -31,7 +34,7 @@ const DetailsPage = () => {
         <div className="grid gap-4 pb-12">
           {
             details.photos.map(photo => 
-                <img src={photo} key={photo} className='object-cover mx-auto h-96 rounded-md' />
+                <img src={photo} key={photo} className='object-cover mx-auto max-h-screen rounded-md' />
               )
           }
         </div>
@@ -51,14 +54,15 @@ const DetailsPage = () => {
 
       {/* Image Collage */}
       { details.photos && (
-        <div className="mt-6 grid grid-cols-[2fr_1fr] gap-2 overflow-hidden rounded-3xl relative mx-auto">
+        <div 
+        onClick={() => setDisplayPhotos(true)}  
+        className="mt-6 grid grid-cols-[2fr_1fr] gap-2 overflow-hidden rounded-3xl relative mx-auto cursor-pointer">
           <img src={details.photos[0]} className='aspect-square object-cover ' alt="" />
           <div>
             <img src={details.photos[1]} alt="" className='aspect-square object-cover ' />
             <img src={details.photos[2]} alt="" className='aspect-square object-cover relative top-2' />
           </div>
           <button 
-            onClick={() => setDisplayPhotos(true)}  
             className="absolute bg-white rounded-2xl px-4 py-2 flex gap-2 items-center bottom-2 right-2 opacity-90 hover:opacity-100 text-sm cursor-pointer"
           >
             <BsGrid1X2 className='h-4 w-4'/>
