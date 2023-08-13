@@ -49,7 +49,7 @@ const AddAccomodationPage = () => {
       // retrieve and set details of place for edit 
       axios.get(`/place/${id}`)
         .then(({ data: { placeDoc } }) => {
-          const { title, description, address, perks, extraInfo, checkIn, checkOut, maxGuests, photos } = placeDoc
+          const { title, description, address, perks, extraInfo, checkIn, checkOut, maxGuests, price, photos } = placeDoc
           setTitle(title)
           setDescription(description)
           setAddress(address)
@@ -57,6 +57,7 @@ const AddAccomodationPage = () => {
           setExtraInfo(extraInfo)
           setCheckIn(checkIn)
           setCheckOut(checkOut)
+          setPrice(price)
           setMaxGuests(maxGuests)
           setUploadedPhotos(photos)
         })
@@ -70,6 +71,7 @@ const AddAccomodationPage = () => {
     const [checkIn, setCheckIn] = useState('')
     const [checkOut, setCheckOut] = useState('')
     const [maxGuests, setMaxGuests] = useState('')
+    const [price, setPrice] = useState('')
     const [uploadedPhotos, setUploadedPhotos] = useState([])
     
     const handleSubmit = (ev) => {
@@ -83,7 +85,7 @@ const AddAccomodationPage = () => {
     const addNewPlace = () => {
       
       axios.post('/place', {
-        title, description, address, perks, extraInfo, checkIn, checkOut, maxGuests, photos: uploadedPhotos
+        title, description, address, perks, extraInfo, checkIn, checkOut, maxGuests, price, photos: uploadedPhotos
       })
       .then(() => {
         alert("New place added")
@@ -99,7 +101,7 @@ const AddAccomodationPage = () => {
     const updatePlace = () => {
 
       axios.put('/place', {
-        id, title, description, address, perks, extraInfo, checkIn, checkOut, maxGuests, photos: uploadedPhotos
+        id, title, description, address, perks, extraInfo, checkIn, checkOut, maxGuests, price, photos: uploadedPhotos
       })
         .then(() => {
           alert('Place updated')
@@ -115,7 +117,7 @@ const AddAccomodationPage = () => {
     return (
       <>
 
-        <form className="mt-10 py-5 px-10 max-w-3xl mx-auto mb-64" onSubmit={handleSubmit}>
+        <form className="mt-10 py-5 px-10 max-w-5xl mx-auto mb-64" onSubmit={handleSubmit}>
             
             <FormInput 
             label='Title' 
@@ -167,7 +169,7 @@ const AddAccomodationPage = () => {
             />
             
             {/* Check-in & Check-out */}
-            <div className="mb-4 grid grid-cols-3 gap-2">
+            <div className="mb-4 grid grid-cols-4 gap-2">
 
                 <FormInput 
                 label='Check-in'
@@ -193,6 +195,15 @@ const AddAccomodationPage = () => {
                 value={maxGuests}
                 setValue={setMaxGuests}
                 />
+                <FormInput 
+                label='Price' 
+                subText='Rent per night' 
+                placeholder='10,000' 
+                inputStyle={'rounded-lg'}
+                value={price}
+                setValue={setPrice}
+                />
+
 
             </div>
 

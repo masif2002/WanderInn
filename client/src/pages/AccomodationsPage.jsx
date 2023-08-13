@@ -38,7 +38,7 @@ const AccomodationsPage = () => {
   const [places, setPlaces] = useState([])
 
   useEffect(() => {
-    axios.get('places')
+    axios.get('/myplace')
     .then(({ data }) => setPlaces(data))
     .catch((err) => {
       console.log(err)
