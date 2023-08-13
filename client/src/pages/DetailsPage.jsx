@@ -21,17 +21,17 @@ const DetailsPage = () => {
 
   if (displayPhotos && details.photos) {
     return (
-      <div className="bg-white absolute text-black w-full min-h-screen py-12">
+      <div className="bg-white absolute text-black inset-0 min-h-screen py-12">
         <button
           onClick={() => setDisplayPhotos(false)} 
           className="fixed top-3 left-16 px-4 py-2 border border-primary rounded-3xl font-light flex items-center gap-2 bg-primary text-white">
           <BsChevronLeft className='h-3 w-3' />
           Back
         </button>
-        <div className="grid gap-4 ">
+        <div className="grid gap-4 pb-12">
           {
             details.photos.map(photo => 
-                <img src={photo}  className='object-cover mx-auto h-96' />
+                <img src={photo} key={photo} className='object-cover mx-auto h-96 rounded-md' />
               )
           }
         </div>
@@ -57,12 +57,13 @@ const DetailsPage = () => {
             <img src={details.photos[1]} alt="" className='aspect-square object-cover ' />
             <img src={details.photos[2]} alt="" className='aspect-square object-cover relative top-2' />
           </div>
-          <div className="absolute bg-white rounded-2xl px-4 py-2 flex gap-2 items-center bottom-2 right-2 opacity-90 hover:opacity-100 text-sm cursor-pointer">
+          <button 
+            onClick={() => setDisplayPhotos(true)}  
+            className="absolute bg-white rounded-2xl px-4 py-2 flex gap-2 items-center bottom-2 right-2 opacity-90 hover:opacity-100 text-sm cursor-pointer"
+          >
             <BsGrid1X2 className='h-4 w-4'/>
-            <button
-              onClick={() => setDisplayPhotos(true)} 
-              className='font-light'>Show all photos</button>
-          </div>
+            <p className='font-light'>Show all photos</p>
+          </button>
 
         </div>
       )}
@@ -85,7 +86,7 @@ const DetailsPage = () => {
           </div>
 
           {/* Booking widget */}
-          <div className='border p-5 shadow-lg rounded-2xl'>
+          <div className='-mt-4 border p-5 shadow-lg rounded-2xl'>
             <h4 className="font-medium text-lg">
               ₹{details.price + ' '} 
               <span className="font-light text-gray-500 text-sm">
@@ -97,17 +98,17 @@ const DetailsPage = () => {
 
                 <div className='p-3'>
                   <label className='uppercase text-xs font-medium block'>Check-in</label>
-                  <input className='font-light' type="date" value={'2018-08-08'} />
+                  <input className='font-light' type="date"/>
                 </div>
 
                 <div className='border-l border-gray-300 p-3'>
                   <label className='uppercase text-xs font-medium block'>Check-out</label>
-                  <input className='font-light' type="date" value={'2018-08-08'} />
+                  <input className='font-light' type="date"  />
                 </div>
 
                 <div className='col-span-2 border-t border-gray-300 p-3'>
                   <label className='uppercase text-xs font-medium block'>Guests</label>
-                  <input className='font-light' type="number" value={details.maxGuests} />
+                  <input className='font-light' type="number" placeholder={details.maxGuests} />
                 </div>
             </div>
 
