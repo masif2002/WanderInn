@@ -50,7 +50,7 @@ const AccomodationsPage = () => {
     <>  
         <button
           onClick={() => navigate("./new")}
-          className="primary flex justify-center items-center gap-2 mt-12 mx-auto max-w-sm "
+          className="primary rounded-3xl flex justify-center items-center gap-2 mt-12 mx-auto max-w-sm "
         >
           <AiOutlinePlus />
           <span>Add new place</span>

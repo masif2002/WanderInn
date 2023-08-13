@@ -208,7 +208,7 @@ const AddAccomodationPage = () => {
             </div>
 
             {/* Submit */}
-            <button className="primary hover:opacity-80">
+            <button className="primary rounded-3xl hover:opacity-80">
                 Save
             </button>
 

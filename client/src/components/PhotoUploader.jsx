@@ -71,7 +71,7 @@ const PhotoUploader = ({ uploadedPhotos, setUploadedPhotos }) => {
             
                 {uploadedPhotos.map((url) => 
                     <div className='relative' key={url}>
-                        <img  src={url} alt="upload" className="rounded-3xl w-full object-cover h-32" />
+                        <img  src={url} alt="upload" className="rounded-3xl w-full object-cover h-48" />
                         <BsTrash3Fill className=" absolute z-10 top-2 right-2 p-1 bg-white rounded-full h-5 w-5 cursor-pointer" onClick={() => removePhoto(url)} />
                         
                         {

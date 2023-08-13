@@ -26,7 +26,7 @@ const LoginPage = () => {
       const { _id, name, email } = data
       alert(data.message);
       setUser({_id, name, email})
-      navigate('/')
+      navigate('/profile')
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);

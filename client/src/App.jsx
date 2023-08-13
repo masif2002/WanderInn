@@ -8,7 +8,8 @@ import {
   ProfilePage,
   BookingsPage,
   AccomodationsPage,
-  AddAccomodationPage
+  AddAccomodationPage,
+  DetailsPage
 } from "./pages";
 
 import axios from "axios";
@@ -33,6 +34,7 @@ function App() {
             <Route path="accomodations/new" element={<AddAccomodationPage />} />
             <Route path="accomodations/:id" element={<AddAccomodationPage />} />
           </Route>
+          <Route path="place/:id" element={<DetailsPage />}/>
         </Route>
       </Routes>
     </UserContextProvider>
