@@ -161,8 +161,8 @@ app.post('/upload-photos', photosMiddleware.array('files[]'), (req, res) => {
   res.status(200).json(uploadedURL)
 })
 
-
-app.get('/places', async (req, res) => {
+// List of all places from an owner
+app.get('/myplace', async (req, res) => {
   const { token } = req.cookies
 
   if (!token) return res.status(401).json({message: "Please log in!"})
@@ -185,7 +185,7 @@ app.get('/places', async (req, res) => {
 })
 
 app.post('/place', (req, res) => {
-  const { title, description, address, photos, perks, extraInfo, checkIn, checkOut, maxGuests} = req.body
+  const { title, description, address, photos, perks, extraInfo, checkIn, checkOut, maxGuests, price} = req.body
 
   const { token } = req.cookies
   if (!token) return res.status(401).json({message: "Please log in!"})
@@ -199,7 +199,7 @@ app.post('/place', (req, res) => {
   }
 
   const newPlace = new Accomodation({
-    owner:_id, title, description, address, photos, perks, extraInfo, checkIn, checkOut, maxGuests
+    owner:_id, title, description, address, photos, perks, extraInfo, checkIn, checkOut, maxGuests, price
   })
 
   newPlace.save()
@@ -210,12 +210,12 @@ app.post('/place', (req, res) => {
 })
 
 app.put('/place', async (req, res) => {
-  const { id, title, description, address, photos, perks, extraInfo, checkIn, checkOut, maxGuests} = req.body
+  const { id, title, description, address, photos, perks, extraInfo, checkIn, checkOut, maxGuests, price} = req.body
 
   // Verify Token here 
   const placeDoc = await Accomodation.findByIdAndUpdate(
     id, 
-    { title, description, address, photos, perks, extraInfo, checkIn, checkOut, maxGuests}
+    { title, description, address, photos, perks, extraInfo, checkIn, checkOut, maxGuests, price}
   )
 
   res.json({message: 'Doc updated'})
@@ -231,6 +231,19 @@ app.get('/place/:id', async (req, res) => {
 
 })
 
+// List of all places
+app.get('/places', (req, res) => {
+
+  Accomodation.find({})
+    .then((placesList) => {
+      return res.json({ placesList })
+    })
+    .catch((err) => {
+      console.log(err)
+      return res.status(500).json({message: "Oops! Something went wrong!"})
+    })
+
+})
 
 
 app.listen(5000, () => console.log('Server listening on port 5000...'))

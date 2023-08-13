@@ -11,7 +11,8 @@ const AccomodationSchema = new Schema ({
     extraInfo: String,
     checkIn: String,
     checkOut: String,
-    maxGuests: Number
+    maxGuests: Number,
+    price: String
 })
 
 const AccomodationModel = mongoose.model('Accomodation', AccomodationSchema)
