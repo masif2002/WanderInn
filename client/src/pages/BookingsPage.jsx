@@ -12,7 +12,6 @@ export default function BookingsPage () {
     useEffect(() => {
         axios.get('/bookings')
           .then(({ data }) => {
-            console.log(data.bookings)
             setBookings(data.bookings)
           })
     }, [])
@@ -52,7 +51,7 @@ export default function BookingsPage () {
                                 </div>
 
                                 <Link
-                                    to={`/booking/${bookingId}`} 
+                                    to={`/profile/bookings/${bookingId}`} 
                                     className="absolute bottom-3 right-5 text-sm flex items-center gap-1 text-gray-800 font-light"
                                 >
                                     <p>View Details</p>

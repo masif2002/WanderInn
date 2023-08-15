@@ -14,7 +14,7 @@ const HomePage = () => {
   }, [])
 
   return (
-    <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8 bg-gray-50 px-32 py-8 grow' >
+    <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8 bg-gray-50 px-32 py-16 grow' >
 
       {
         places.map((place) => 

@@ -9,7 +9,8 @@ import {
   BookingsPage,
   AccomodationsPage,
   AddAccomodationPage,
-  DetailsPage
+  AccomodationDetails,
+  BookingDetails,
 } from "./pages";
 
 import axios from "axios";
@@ -27,14 +28,15 @@ function App() {
           <Route index element={<HomePage />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
+          <Route path="place/:id" element={<AccomodationDetails />}/>
           <Route path="profile" element={<ProfileLayout />}>
             <Route index element={<ProfilePage/>}/>
             <Route path="bookings" element={<BookingsPage />} />
+            <Route path="bookings/:id" element={<BookingDetails />}/>
             <Route path="accomodations" element={<AccomodationsPage />} />
             <Route path="accomodations/new" element={<AddAccomodationPage />} />
             <Route path="accomodations/:id" element={<AddAccomodationPage />} />
           </Route>
-          <Route path="place/:id" element={<DetailsPage />}/>
         </Route>
       </Routes>
     </UserContextProvider>

@@ -24,7 +24,7 @@ const InputField = ({ field, value, setValue, type, className }) => {
   )
 }
 
-const DetailsPage = () => {
+const AccomodationDetails = () => {
   const { id } = useParams()
 
   const [details, setDetails] = useState({})
@@ -215,4 +215,4 @@ const DetailsPage = () => {
   )
 }
 
-export default DetailsPage
+export default AccomodationDetails

@@ -12,20 +12,18 @@ export default function Header() {
   const { user } = useContext(UserContext)
 
   return (
-    <header className="flex justify-between items-center py-4 px-8 border-b">
+    <header className="flex justify-between items-center py-4 px-8 shadow-lg z-20 relative">
       {/* Logo and Brand*/}
       <Link to='/' className="flex items-center gap-1">
-        <MdOutlineHotelClass className="h-6 w-6 text-primary" />
-        <h1 className="font-bold text-xl">
+        <MdOutlineHotelClass className="h-8 w-8 text-primary" />
+        <h1 className="font-bold text-3xl">
           Wander<span className="text-primary">Inn</span>
         </h1>
       </Link>
 
       {/* Search Bar */}
       <div className="flex items-center gap-3 border border-gray-300 shadow-sm rounded-3xl px-4 py-2">
-        <p className="border-r pr-2">Anywhere</p>
-        <p className="border-r pr-2">Any Week</p>
-        <p>Add Guests</p>
+        <input type="text" placeholder="Your dream destination ..." className="outline-none"/>
         <button className="p-1.5 rounded-full text-white bg-primary flex items-center justify-center">
           <GoSearch className="h-4 w-4" />
         </button>
