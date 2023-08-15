@@ -9,10 +9,10 @@ const Accomodation = ({ place }) => {
   return (
     <Link
       to={`./${id}`} 
-      className="flex gap-5 p-8 bg-gray-200 rounded-2xl cursor-pointer"
+      className="md:flex gap-5 md:p-8 bg-gray-200 rounded-2xl cursor-pointer overflow-hidden"
     >
-      <img src={photos[0]} alt="" className="h-32 w-60 object-cover rounded-lg shrink-0" />
-      <div>
+      <img src={photos[0]} alt="" className="md:h-32 w-full md:w-60 object-cover rounded-lg shrink-0" />
+      <div className="p-6">
         <h1 className="text-lg font-semibold">
           {
             title.length > 45 ? 
@@ -56,7 +56,7 @@ const AccomodationsPage = () => {
           <span>Add new place</span>
         </button>
 
-        <div className="flex flex-col gap-5 max-w-3xl mx-auto mt-6">
+        <div className="flex flex-col gap-10 md:gap-5 max-w-sm sm:max-w-md md:max-w-3xl mx-auto mt-6">
           {places?.map((place) => <Accomodation key={place._id} place={place} />)}
         </div>
 

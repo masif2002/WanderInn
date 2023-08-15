@@ -86,10 +86,10 @@ const PhotoUploader = ({ uploadedPhotos, setUploadedPhotos }) => {
                     </div>
                 )}
                 
-                <label className="cursor-pointer flex justify-center items-center gap-2 border border-gray-400 rounded-3xl text-gray-800 min-h-[100px]">
+                <label className="cursor-pointer flex flex-col md:flex-row justify-center items-center gap-2 border border-gray-400 rounded-3xl text-gray-800 min-h-[100px]">
                     <input type="file" className="hidden" multiple onChange={uploadPhoto} />
-                    <FiUpload className="h-5 w-5"/>
-                    <p >Upload Photos</p>
+                    <FiUpload className="md:h-5 md:w-5"/>
+                    <p className=''>Upload Photos</p>
                 </label>
             </div>
          </div>

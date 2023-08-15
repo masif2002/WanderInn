@@ -71,103 +71,105 @@ const AccomodationDetails = () => {
 
   return (
 
-    <div className='max-w-4xl 2xl:max-w-6xl mx-auto py-16'> 
+    <div className="bg-gray-100">
+        <div className='max-w-sm md:max-w-lg lg:max-w-4xl 2xl:max-w-6xl mx-auto py-16'> 
 
-      <ImageGrid 
-        title={details.title}
-        photos={details.photos}
-        address={details.address}
-      />
+        <ImageGrid 
+          title={details.title}
+          photos={details.photos}
+          address={details.address}
+        />
 
-      {/* Description */}
-      <div className='mt-10 '>
-        <h2 className='text-2xl capitalize font-medium'>About the place</h2>
-        <p className='text-gray-800'>{details.description}</p>
-      </div>
+        {/* Description */}
+        <div className='mt-10 '>
+          <h2 className='text-2xl capitalize font-medium'>About the place</h2>
+          <p className='text-gray-800'>{details.description}</p>
+        </div>
 
-      {/* Other Info & Booking widget*/}
-      <div className="mt-8 grid grid-cols-[6fr_4fr] gap-6">
-          <div>
-            <p><span className="font-medium text-lg">Check-in:</span> {details.checkIn} </p>
-            <p><span className="font-medium text-lg">Check-out:</span> {details.checkOut} </p>
-            <p><span className="font-medium text-lg">Max Guests: </span> {details.maxGuests} </p>
-            
-            <h2 className='text-2xl capitalize font-medium mt-6'>Extra info</h2>
-            <p className='text-gray-600'>{details.extraInfo}</p>
-          </div>
-
-          {/* Booking widget */}
-          <div className='-mt-4 border p-5 shadow-lg rounded-2xl'>
-            <h4 className="font-medium text-lg">
-              ₹{details.price + ' '} 
-              <span className="font-light text-gray-500 text-sm">
-               per night
-              </span>
-            </h4>
-
-            <div className="mt-4 border rounded-2xl border-gray-300 grid grid-cols-2">
-
-                <InputField 
-                  className='p-3'
-                  field='Check-in'
-                  type='date'
-                  value={checkIn}
-                  setValue={setCheckIn}
-
-                 />
-                <InputField 
-                  className='border-l border-gray-300 p-3' 
-                  field='Check-out'
-                  type='date'
-                  value={checkOut}
-                  setValue={setCheckOut} 
-                />
-                
-                <InputField 
-                  className='col-span-2 border-t border-gray-300 p-3' 
-                  field='Guests' 
-                  type='number' 
-                  value={totalGuests} 
-                  setValue={setTotalGuests} 
-              />
-                
-                {
-                  checkIn && checkOut && (
-                    <>
-                      <InputField 
-                        className='col-span-2 border-t border-gray-300 p-3' 
-                        field='Full Name'
-                        type='text' 
-                        value={fullName} 
-                        setValue={setFullName} 
-                      />
-    
-                      <InputField 
-                        className='col-span-2 border-t border-gray-300 p-3' 
-                        field='Phone' 
-                        type='text' 
-                        value={phone} 
-                        setValue={setPhone} 
-                      />
-                    </>
-                  )
-                }
-            
+        {/* Other Info & Booking widget*/}
+        <div className="mt-8 flex flex-col md:grid md:grid-cols-[6fr_4fr] gap-6">
+            <div>
+              <p><span className="font-medium text-lg">Check-in:</span> {details.checkIn} </p>
+              <p><span className="font-medium text-lg">Check-out:</span> {details.checkOut} </p>
+              <p><span className="font-medium text-lg">Max Guests: </span> {details.maxGuests} </p>
+              
+              <h2 className='text-2xl capitalize font-medium mt-6'>Extra info</h2>
+              <p className='text-gray-600'>{details.extraInfo}</p>
             </div>
-            
-            {/* Havent handled missing fields */}
-            <button 
-              onClick={bookPlace}
-              className="mt-4 primary rounded-xl capitalize"
-            >
-              Book now
-            </button>
 
-          </div>
+            {/* Booking widget */}
+            <div className='mt-4 d:-mt-4 border p-5 shadow-lg rounded-2xl bg-white'>
+              <h4 className="font-medium text-lg">
+                ₹{details.price + ' '} 
+                <span className="font-light text-gray-500 text-sm">
+                per night
+                </span>
+              </h4>
+
+              <div className="mt-4 border rounded-2xl border-gray-300 grid grid-cols-2">
+
+                  <InputField 
+                    className='p-3'
+                    field='Check-in'
+                    type='date'
+                    value={checkIn}
+                    setValue={setCheckIn}
+
+                  />
+                  <InputField 
+                    className='border-l border-gray-300 p-3' 
+                    field='Check-out'
+                    type='date'
+                    value={checkOut}
+                    setValue={setCheckOut} 
+                  />
+                  
+                  <InputField 
+                    className='col-span-2 border-t border-gray-300 p-3' 
+                    field='Guests' 
+                    type='number' 
+                    value={totalGuests} 
+                    setValue={setTotalGuests} 
+                />
+                  
+                  {
+                    checkIn && checkOut && (
+                      <>
+                        <InputField 
+                          className='col-span-2 border-t border-gray-300 p-3' 
+                          field='Full Name'
+                          type='text' 
+                          value={fullName} 
+                          setValue={setFullName} 
+                        />
+      
+                        <InputField 
+                          className='col-span-2 border-t border-gray-300 p-3' 
+                          field='Phone' 
+                          type='text' 
+                          value={phone} 
+                          setValue={setPhone} 
+                        />
+                      </>
+                    )
+                  }
+              
+              </div>
+              
+              {/* Havent handled missing fields */}
+              <button 
+                onClick={bookPlace}
+                className="mt-4 primary rounded-xl capitalize"
+              >
+                Book now
+              </button>
+
+            </div>
+
+        </div>
+
 
       </div>
-
-
     </div>
   )
 }

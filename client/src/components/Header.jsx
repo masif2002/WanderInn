@@ -22,7 +22,7 @@ export default function Header() {
       </Link>
 
       {/* Search Bar */}
-      <div className="flex items-center gap-3 border border-gray-300 shadow-sm rounded-3xl px-4 py-2">
+      <div className="hidden md:flex items-center gap-3 border border-gray-300 shadow-sm rounded-3xl px-4 py-2">
         <input type="text" placeholder="Your dream destination ..." className="outline-none"/>
         <button className="p-1.5 rounded-full text-white bg-primary flex items-center justify-center">
           <GoSearch className="h-4 w-4" />

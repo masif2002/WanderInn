@@ -9,7 +9,7 @@ import { BiSolidParking } from 'react-icons/bi'
 
 import { Perk, PhotoUploader } from '../components'
 
-const FormInput = ({ label, subText, textBox=false, placeholder, inputStyle, value, setValue }) => {
+const FormInput = ({ label, subText, textBox=false, placeholder, value, setValue }) => {
     return (
         <div className="mb-4">
             <label htmlFor="" className="font-semibold text-xl ml-3">{label}</label>
@@ -169,7 +169,7 @@ const AddAccomodationPage = () => {
             />
             
             {/* Check-in & Check-out */}
-            <div className="mb-4 grid grid-cols-4 gap-2">
+            <div className="mb-4 flex flex-col md:grid md:grid-cols-4 gap-2">
 
                 <FormInput 
                 label='Check-in'

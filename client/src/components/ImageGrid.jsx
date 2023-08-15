@@ -15,18 +15,20 @@ const ImageGrid = ({ title, photos, address, children }) => {
 
     return (
       <div className="bg-white absolute text-black inset-0 min-h-screen py-12 z-50">
-        <button
-          onClick={() => setDisplayPhotos(false)} 
-          className="fixed top-3 left-16 px-4 py-2 border border-primary rounded-3xl font-light flex items-center gap-2 bg-primary text-white">
-          <BsChevronLeft className='h-3 w-3' />
-          Back
-        </button>
-        <div className="grid gap-4 pb-12">
-          {
-            photos.map(photo => 
-                <img src={photo} key={photo} className='object-cover mx-auto max-h-[75vh] rounded-md' />
-              )
-          }
+        <div className="bg-white max-w-sm sm:max-w-md md:max-w-full mx-auto">
+          <button
+            onClick={() => setDisplayPhotos(false)} 
+            className="fixed top-1 md:top-3 left-2 md:left-16 px-4 py-2 border border-primary rounded-3xl font-light flex items-center gap-2 bg-primary text-white">
+            <BsChevronLeft className='h-3 w-3' />
+            Back
+          </button>
+          <div className="grid gap-4 pb-12">
+            {
+              photos.map(photo => 
+                  <img src={photo} key={photo} className='object-cover mx-auto max-h-[75vh] rounded-md' />
+                )
+            }
+          </div>
         </div>
       </div>
     )

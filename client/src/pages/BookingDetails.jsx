@@ -10,7 +10,7 @@ import { CiUser } from 'react-icons/ci'
 
 const BookingDetailWidget = ({ checkIn, checkOut, guests }) => {
     return (
-        <div className="mt-4 flex justify-around bg-gray-100 p-3 rounded-2xl">
+        <div className="mt-4 flex flex-col md:flex-row justify-around bg-gray-100 p-3 rounded-2xl">
 
             <div className="flex my-1 items-center gap-2">
                 <BsCalendarCheck className="h-5 w-5"/>
@@ -51,7 +51,7 @@ export default function BookingDetails() {
         <>
             {
                 details && (
-                <div className="max-w-3xl mx-auto mt-16">
+                <div className="max-w-sm sm:max-w-xl md:max-w-3xl mx-auto mt-16">
                     <ImageGrid
                         title={details.placeId.title}
                         photos={details.placeId.photos}

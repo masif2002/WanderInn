@@ -23,30 +23,32 @@ export default function BookingsPage () {
             
             <h1>No bookings found. See properties here</h1> 
                 : 
-            <div className="mx-auto max-w-3xl mt-12">
+            <div className="mx-auto max-w-sm md:max-w-3xl mt-12">
                 {
                     bookings.map(({ _id: bookingId, placeId: { _id, title, photos}, checkIn, checkOut, guests }) => (
-                        <div className="bg-gray-100 rounded-2xl flex gap-5 my-8 overflow-hidden h-40">
-                            <img src={photos[0]} alt="" className="shrink-0 w-64 aspect-square object-cover" />
+                        <Link 
+                            to={`/profile/bookings/${bookingId}`} 
+                            className="bg-gray-100 rounded-2xl flex gap-5 my-8 overflow-hidden h-48 md:h-40">
+                            <img src={photos[0]} alt="" className="md:shrink-0 w-48 md:w-64 aspect-square object-cover" />
 
-                            <div className="px-5 py-3 min-w-0 w-full relative">
-                                <h1 className="text-xl font-medium truncate mb-3">{title}</h1>
+                            <div className="md:px-5 py-3 min-w-0 w-full relative">
+                                <h1 className="md:text-xl font-medium md:truncate mb-3">{title}</h1>
 
                                 <div className="flex my-1 items-center gap-2">
                                     <BsCalendarCheck />
-                                    <p className="text-sm">Check In :</p>
-                                    <p>{checkIn}</p>
+                                    <p className="hidden md:block text-sm">Check In :</p>
+                                    <p>{checkIn.slice(0, 10)}</p>
                                 </div>
 
                                 <div className="flex my-1 items-center gap-2">
                                     <BsCalendarX />
-                                    <p className="text-sm">Check Out :</p>
-                                    <p>{checkOut}</p>
+                                    <p className="hidden md:block text-sm">Check Out :</p>
+                                    <p>{checkOut.slice(0, 10)}</p>
                                 </div>
 
                                 <div className="flex my-1 items-center gap-2">
                                     <CiUser />
-                                    <p className="text-sm">Guests :</p>
+                                    <p className="hidden md:block text-sm">Guests :</p>
                                     <p>{guests}</p>
                                 </div>
 
@@ -59,7 +61,7 @@ export default function BookingsPage () {
                                 </Link>
 
                             </div>
-                        </div>
+                        </Link>
                     ))
                 }
             </div>
