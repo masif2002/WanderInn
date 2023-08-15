@@ -268,7 +268,7 @@ app.get('/places', (req, res) => {
 
 
 
-
+// Book a place
 app.post('/booking', (req, res) => {
   const details = req.body
   const { token } = req.cookies
@@ -292,6 +292,7 @@ app.post('/booking', (req, res) => {
 
 })
 
+// Get all bookings for a user
 app.get('/bookings', (req, res) => {
   const { token } = req.cookies
 
@@ -308,5 +309,25 @@ app.get('/bookings', (req, res) => {
     )
 })
 
+// Details of specific booking
+app.get('/booking/:id', (req, res) => {
+  const { token } = req.cookies
+  const { id } = req.params
+
+  // Getting booking Id without matching user
+  // So anyone can get booking details with just B_ID
+
+  processJWT(token)
+    .then(() => {
+      Booking.findById(id).populate('placeId')
+        .then((booking) => {
+          res.json({booking})
+        })
+        // What if booking id not found
+    })
+    .catch((err) => 
+      res.status(401).json(err)
+    )
+})
 
 app.listen(5000, () => console.log('Server listening on port 5000...'))

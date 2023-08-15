@@ -3,10 +3,10 @@ import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios';
 import { useState } from 'react';
 
-import { FiMapPin } from 'react-icons/fi'
-import { BsGrid1X2, BsChevronLeft } from 'react-icons/bs'
 import { useContext } from 'react';
 import { UserContext } from '../context/UserContext';
+
+import { ImageGrid } from '../components'
 
 const InputField = ({ field, value, setValue, type, className }) => {
   return (
@@ -28,7 +28,6 @@ const AccomodationDetails = () => {
   const { id } = useParams()
 
   const [details, setDetails] = useState({})
-  const [displayPhotos, setDisplayPhotos] = useState(false)
 
   const [checkIn, setCheckIn] = useState('')
   const [checkOut, setCheckOut] = useState('')
@@ -68,59 +67,17 @@ const AccomodationDetails = () => {
   }
 
 
-  {/* Display all photos*/}
-  if (displayPhotos && details.photos) {
-
-    window.scrollTo(0, 0)
-
-    return (
-      <div className="bg-white absolute text-black inset-0 min-h-screen py-12">
-        <button
-          onClick={() => setDisplayPhotos(false)} 
-          className="fixed top-3 left-16 px-4 py-2 border border-primary rounded-3xl font-light flex items-center gap-2 bg-primary text-white">
-          <BsChevronLeft className='h-3 w-3' />
-          Back
-        </button>
-        <div className="grid gap-4 pb-12">
-          {
-            details.photos.map(photo => 
-                <img src={photo} key={photo} className='object-cover mx-auto max-h-[75vh] rounded-md' />
-              )
-          }
-        </div>
-      </div>
-    )
-  }
+  
 
   return (
 
     <div className='max-w-4xl 2xl:max-w-6xl mx-auto py-16'> 
 
-      <h1 className='text-3xl'>{details.title}</h1>
-      <div className="flex items-center gap-1">
-        <FiMapPin />
-        <a target='_blank' href={`https://maps.google.com?q=${details.address}`} className='mt-1 text-gray-600 underline'>{details.address}</a>
-      </div>
-
-      {/* Image Collage */}
-      { details.photos && (
-        <div 
-        onClick={() => setDisplayPhotos(true)}  
-        className="mt-6 grid grid-cols-[2fr_1fr] gap-2 overflow-hidden rounded-3xl relative mx-auto ">
-          <img src={details.photos[0]} className='aspect-square object-cover cursor-pointer' alt="" />
-          <div>
-            <img src={details.photos[1]} alt="" className='aspect-square object-cover cursor-pointer' />
-            <img src={details.photos[2]} alt="" className='aspect-square object-cover relative top-2 cursor-pointer' />
-          </div>
-          <button 
-            className="absolute bg-white rounded-2xl px-4 py-2 flex gap-2 items-center bottom-2 right-2 opacity-90 hover:opacity-100 text-sm cursor-pointer"
-          >
-            <BsGrid1X2 className='h-4 w-4'/>
-            <p className='font-light'>Show all photos</p>
-          </button>
-
-        </div>
-      )}
+      <ImageGrid 
+        title={details.title}
+        photos={details.photos}
+        address={details.address}
+      />
 
       {/* Description */}
       <div className='mt-10 '>
