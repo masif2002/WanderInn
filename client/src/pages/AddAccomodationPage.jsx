@@ -17,7 +17,7 @@ const FormInput = ({ label, subText, textBox=false, placeholder, inputStyle, val
             {!textBox && 
               <input 
                 type="text" 
-                className={inputStyle || "rounded-2xl"}
+                className='textfield rounded-2xl'
                 placeholder={placeholder} 
                 value={value}
                 onChange={(ev) => {
@@ -175,7 +175,6 @@ const AddAccomodationPage = () => {
                 label='Check-in'
                 subText='Time to check in' 
                 placeholder='06:00' 
-                inputStyle={'rounded-lg'} 
                 value={checkIn}
                 setValue={setCheckIn}
                 />
@@ -183,7 +182,6 @@ const AddAccomodationPage = () => {
                 label='Check-out' 
                 subText='Time to check out' 
                 placeholder='14:00' 
-                inputStyle={'rounded-lg'}
                 value={checkOut}
                 setValue={setCheckOut}
                 />
@@ -191,7 +189,6 @@ const AddAccomodationPage = () => {
                 label='Max guests' 
                 subText='Maxium number of occupants' 
                 placeholder='3' 
-                inputStyle={'rounded-lg'}
                 value={maxGuests}
                 setValue={setMaxGuests}
                 />
@@ -199,7 +196,6 @@ const AddAccomodationPage = () => {
                 label='Price' 
                 subText='Rent per night' 
                 placeholder='10,000' 
-                inputStyle={'rounded-lg'}
                 value={price}
                 setValue={setPrice}
                 />

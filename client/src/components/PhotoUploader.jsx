@@ -56,9 +56,9 @@ const PhotoUploader = ({ uploadedPhotos, setUploadedPhotos }) => {
             <p className="ml-3 text-sm text-gray-400">Nice photos of the place with good lighting and full coverage</p>
             
             <div className="flex border border-gray-400 rounded-3xl">
-                <input 
-                    type="text"
-                    className="border-none focus:outline-none rounded-3xl"
+                <input
+                    type='text' 
+                    className="textfield border-none focus:outline-none rounded-3xl"
                     placeholder="Photo as URL ..."
                     onChange={(e) => setPhotoLink(e.target.value)}
                     value={photoLink}

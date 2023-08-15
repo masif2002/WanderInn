@@ -1,24 +1,74 @@
 import React, { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios';
 import { useState } from 'react';
 
 import { FiMapPin } from 'react-icons/fi'
 import { BsGrid1X2, BsChevronLeft } from 'react-icons/bs'
+import { useContext } from 'react';
+import { UserContext } from '../context/UserContext';
+
+const InputField = ({ field, value, setValue, type, className }) => {
+  return (
+    <div className={className}>
+
+      <label className='uppercase text-xs font-medium block'>{field}</label>
+      <input 
+        className='font-light focus:outline-0 border-none w-full' 
+        type={type} 
+        value={value}
+        onChange={(ev) => setValue((ev.target.value))} 
+      />
+
+    </div>
+  )
+}
 
 const DetailsPage = () => {
   const { id } = useParams()
+
   const [details, setDetails] = useState({})
   const [displayPhotos, setDisplayPhotos] = useState(false)
 
+  const [checkIn, setCheckIn] = useState('')
+  const [checkOut, setCheckOut] = useState('')
+  const [totalGuests, setTotalGuests] = useState(1)
+  const [fullName, setFullName] = useState('')
+  const [phone, setPhone] = useState('')
+
+  const { user } = useContext(UserContext)
+  const navigate = useNavigate()
+
+  // Fetch details about the place
   useEffect(() => {
     if (!id) return
+
     axios.get(`/place/${id}`)
       .then(({ data: { placeDoc } }) => {
         setDetails(placeDoc)
       })
   }, [])
 
+  // Set name in form
+  useEffect(() => {
+    if (user) setFullName(user.name)
+  }, [user])
+
+
+  const bookPlace = () => {
+    axios.post('/booking', {placeId: id, checkIn, checkOut, guests: totalGuests, fullName, phone})
+      .then(({ data }) => {
+        const { message } = data
+        alert(message)
+        navigate('/profile/bookings')
+      })
+      .catch((err) => {
+        alert(err.response.data.message)
+      })
+  }
+
+
+  {/* Display all photos*/}
   if (displayPhotos && details.photos) {
 
     window.scrollTo(0, 0)
@@ -34,7 +84,7 @@ const DetailsPage = () => {
         <div className="grid gap-4 pb-12">
           {
             details.photos.map(photo => 
-                <img src={photo} key={photo} className='object-cover mx-auto max-h-screen rounded-md' />
+                <img src={photo} key={photo} className='object-cover mx-auto max-h-[75vh] rounded-md' />
               )
           }
         </div>
@@ -56,11 +106,11 @@ const DetailsPage = () => {
       { details.photos && (
         <div 
         onClick={() => setDisplayPhotos(true)}  
-        className="mt-6 grid grid-cols-[2fr_1fr] gap-2 overflow-hidden rounded-3xl relative mx-auto cursor-pointer">
-          <img src={details.photos[0]} className='aspect-square object-cover ' alt="" />
+        className="mt-6 grid grid-cols-[2fr_1fr] gap-2 overflow-hidden rounded-3xl relative mx-auto ">
+          <img src={details.photos[0]} className='aspect-square object-cover cursor-pointer' alt="" />
           <div>
-            <img src={details.photos[1]} alt="" className='aspect-square object-cover ' />
-            <img src={details.photos[2]} alt="" className='aspect-square object-cover relative top-2' />
+            <img src={details.photos[1]} alt="" className='aspect-square object-cover cursor-pointer' />
+            <img src={details.photos[2]} alt="" className='aspect-square object-cover relative top-2 cursor-pointer' />
           </div>
           <button 
             className="absolute bg-white rounded-2xl px-4 py-2 flex gap-2 items-center bottom-2 right-2 opacity-90 hover:opacity-100 text-sm cursor-pointer"
@@ -100,23 +150,62 @@ const DetailsPage = () => {
 
             <div className="mt-4 border rounded-2xl border-gray-300 grid grid-cols-2">
 
-                <div className='p-3'>
-                  <label className='uppercase text-xs font-medium block'>Check-in</label>
-                  <input className='font-light' type="date"/>
-                </div>
+                <InputField 
+                  className='p-3'
+                  field='Check-in'
+                  type='date'
+                  value={checkIn}
+                  setValue={setCheckIn}
 
-                <div className='border-l border-gray-300 p-3'>
-                  <label className='uppercase text-xs font-medium block'>Check-out</label>
-                  <input className='font-light' type="date"  />
-                </div>
-
-                <div className='col-span-2 border-t border-gray-300 p-3'>
-                  <label className='uppercase text-xs font-medium block'>Guests</label>
-                  <input className='font-light' type="number" placeholder={details.maxGuests} />
-                </div>
+                 />
+                <InputField 
+                  className='border-l border-gray-300 p-3' 
+                  field='Check-out'
+                  type='date'
+                  value={checkOut}
+                  setValue={setCheckOut} 
+                />
+                
+                <InputField 
+                  className='col-span-2 border-t border-gray-300 p-3' 
+                  field='Guests' 
+                  type='number' 
+                  value={totalGuests} 
+                  setValue={setTotalGuests} 
+              />
+                
+                {
+                  checkIn && checkOut && (
+                    <>
+                      <InputField 
+                        className='col-span-2 border-t border-gray-300 p-3' 
+                        field='Full Name'
+                        type='text' 
+                        value={fullName} 
+                        setValue={setFullName} 
+                      />
+    
+                      <InputField 
+                        className='col-span-2 border-t border-gray-300 p-3' 
+                        field='Phone' 
+                        type='text' 
+                        value={phone} 
+                        setValue={setPhone} 
+                      />
+                    </>
+                  )
+                }
+            
             </div>
+            
+            {/* Havent handled missing fields */}
+            <button 
+              onClick={bookPlace}
+              className="mt-4 primary rounded-xl capitalize"
+            >
+              Book now
+            </button>
 
-            <button className="mt-4 primary rounded-xl capitalize">Book now</button>
           </div>
 
       </div>

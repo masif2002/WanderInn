@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const User = require('./models/User.js')
 const Accomodation = require('./models/Accomodation.js')
+const Booking = require('./models/Booking.js')
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt') 
 const jwt = require('jsonwebtoken')
@@ -9,7 +10,6 @@ const cookieParser = require('cookie-parser')
 const download = require('image-downloader')
 const multer = require('multer')
 const fs = require('fs')
-const { json } = require('express')
 
 require('dotenv').config()
 
@@ -32,6 +32,25 @@ app.use(cookieParser())
 
 app.use('/photos', express.static('uploads'))
 
+
+function processJWT(token) {
+  return new Promise((resolve, reject) => {
+ 
+     if (!token) reject({ message: "Must be authenticated" })
+ 
+ 
+     jwt.verify(token, jwtSecret, (err, userInfo) => {
+       
+       if (err) reject({ message: "Invalid Token" })
+ 
+       resolve(userInfo._id)
+ 
+     })
+ 
+  })
+ 
+ }
+ 
 app.get('/', (req, res) => {
     res.json("Hello World")
 })
@@ -205,6 +224,7 @@ app.post('/place', (req, res) => {
   newPlace.save()
   .then((placeDoc) => res.json(placeDoc)) 
   .catch((err) => {
+    console.log(err)
     res.status(500).json({message: "Something went wrong!"})
   })
 })
@@ -213,7 +233,7 @@ app.put('/place', async (req, res) => {
   const { id, title, description, address, photos, perks, extraInfo, checkIn, checkOut, maxGuests, price} = req.body
 
   // Verify Token here 
-  const placeDoc = await Accomodation.findByIdAndUpdate(
+  await Accomodation.findByIdAndUpdate(
     id, 
     { title, description, address, photos, perks, extraInfo, checkIn, checkOut, maxGuests, price}
   )
@@ -243,6 +263,49 @@ app.get('/places', (req, res) => {
       return res.status(500).json({message: "Oops! Something went wrong!"})
     })
 
+})
+
+
+
+
+
+app.post('/booking', (req, res) => {
+  const details = req.body
+  const { token } = req.cookies
+
+  processJWT(token)
+    .then((userId) => {
+
+      Booking.create({
+        userId, ...details
+      })
+        .then(() => res.json({message: "Booking successful"}))
+        .catch(() => {
+          res.status(422).json({message: "Boooking failed"})
+        })
+
+    })
+
+    .catch((err) => 
+      res.status(401).json(err)
+    )
+
+})
+
+app.get('/bookings', (req, res) => {
+  const { token } = req.cookies
+
+  processJWT(token)
+    .then((userId) => {
+      Booking.find({ userId }).populate('placeId')
+        .then((bookings) => {
+          res.json({bookings})
+        })
+    
+    })
+    .catch((err) => 
+      res.status(401).json(err)
+    )
 })
 
 
