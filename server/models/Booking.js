@@ -7,6 +7,7 @@ const bookingSchema = new Schema({
     checkIn: { type: Date, required: true },
     checkOut: { type: Date, required: true },
     guests: Number,
+    price: String,
     fullName: { type: String, required: true },
     phone: Number
 })

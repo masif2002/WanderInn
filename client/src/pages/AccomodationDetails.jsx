@@ -7,6 +7,7 @@ import { useContext } from 'react';
 import { UserContext } from '../context/UserContext';
 
 import { ImageGrid } from '../components'
+import differenceInDays from 'date-fns/differenceInDays'
 
 const InputField = ({ field, value, setValue, type, className }) => {
   return (
@@ -55,7 +56,8 @@ const AccomodationDetails = () => {
 
 
   const bookPlace = () => {
-    axios.post('/booking', {placeId: id, checkIn, checkOut, guests: totalGuests, fullName, phone})
+
+    axios.post('/booking', {placeId: id, checkIn, checkOut, guests: totalGuests, fullName, phone, price: details.price})
       .then(({ data }) => {
         const { message } = data
         alert(message)
@@ -98,7 +100,7 @@ const AccomodationDetails = () => {
             </div>
 
             {/* Booking widget */}
-            <div className='mt-4 d:-mt-4 border p-5 shadow-lg rounded-2xl bg-white'>
+            <div className='mt-4 md:-mt-4 border p-5 shadow-lg rounded-2xl bg-white'>
               <h4 className="font-medium text-lg">
                 ₹{details.price + ' '} 
                 <span className="font-light text-gray-500 text-sm">
@@ -146,7 +148,7 @@ const AccomodationDetails = () => {
                         <InputField 
                           className='col-span-2 border-t border-gray-300 p-3' 
                           field='Phone' 
-                          type='text' 
+                          type='tel' 
                           value={phone} 
                           setValue={setPhone} 
                         />
