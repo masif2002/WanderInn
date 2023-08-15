@@ -8,15 +8,8 @@ import { FiChevronRight } from 'react-icons/fi'
 import { HiArrowRight } from 'react-icons/hi'
 import { BsCreditCard } from 'react-icons/bs'
 
+import { BookingInfo } from '../components'
 
-const BookingInfo = ({ Icon, info, style='' }) => {
-    return (
-        <div className={`flex items-center gap-2 md:my-1 ${style}`}>
-            <Icon className="md:h-6 md:w-6" />
-            <p className="text-gray-700 text-sm md:text-normal">{info}</p>
-        </div>
-    )
-}
 
 export default function BookingsPage () {
     const [bookings, setBookings] = useState([])
