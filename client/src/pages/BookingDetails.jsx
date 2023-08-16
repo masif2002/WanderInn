@@ -65,9 +65,9 @@ export default function BookingDetails() {
                 details && (
                     <div className="max-w-sm sm:max-w-xl md:max-w-3xl mx-auto mt-16">
                         <ImageGrid
-                            title={details.placeId.title}
-                            photos={details.placeId.photos}
-                            address={details.placeId.address}
+                            title={details.place.title}
+                            photos={details.place.photos}
+                            address={details.place.address}
                             children={<BookingDetailWidget checkIn={details.checkIn} checkOut={details.checkOut} guests={details.guests} price={details.price} />}
                         />
                     </div>

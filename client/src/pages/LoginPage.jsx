@@ -62,7 +62,7 @@ const LoginPage = () => {
             value={formData.password}
             onChange={handleChange}
           />
-          <button className="bg-primary p-2 rounded-3xl text-white w-full">
+          <button className="bg-primary  mt-4 p-2 rounded-3xl text-white w-full">
             Login
           </button>
           <p className="text-center my-2">

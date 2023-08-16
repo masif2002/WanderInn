@@ -56,7 +56,7 @@ const AccomodationDetails = () => {
 
   const bookPlace = () => {
 
-    axios.post('/booking', {placeId: id, checkIn, checkOut, guests: totalGuests, fullName, phone, price: details.price})
+    axios.post('/booking', {place: id, checkIn, checkOut, guests: totalGuests, fullName, phone, price: details.price})
       .then(({ data }) => {
         const { message } = data
         alert(message)

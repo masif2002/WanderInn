@@ -75,37 +75,36 @@ app.post('/register', async (req, res) => {
 
 app.post('/login', async (req, res) => {
   
-  try {
 
     // Log in credentials
     let { email, password } = req.body
 
     // Fetch User
-    const user = await User.findOne({ email })
-    const { name, _id } = user
+    await User.findOne({ email })
+      .then((user) => {
 
-    if (!user) {
-      return res.status(404).json({message: "Invalid Credentials" })
-    }
-    else {
-      const passwordMatch = bcrypt.compareSync(password, user.password)
-      if (!passwordMatch) return res.status(401).json({message: "Invalid Credentials"})
-    } 
+        if (!user) {
+          return res.status(404).json({message: "Invalid Credentials" })
+        }
 
-    // Sign JWT Token
-    jwt.sign({_id}, jwtSecret, function(err, token) {
-      if (err) throw err
+        const { name, _id } = user
+        const passwordMatch = bcrypt.compareSync(password, user.password)
 
+        if (!passwordMatch) return res.status(401).json({message: "Invalid Credentials"})
+        
+        // Sign JWT Token
+        jwt.sign({_id}, jwtSecret, function(err, token) {
+          if (err) throw err
+          
+          return res.cookie('token', token).json({ _id, name, email, message: "Authentication successful"})
+        })
+      })
       
-      return res.cookie('token', token).json({ _id, name, email, message: "Authentication successful"})
-    })
-
-    
-  } catch (e) {
-    // throw err is caught here
-    console.log(e);
-    res.status(422).json({message: "Something went wrong! Please try again later"})
-  }
+     .catch ((err) => {
+      // throw err is caught here
+      console.log(e);
+      res.status(422).json({message: "Something went wrong! Please try again later"})
+  })
 
 })
 
@@ -276,10 +275,11 @@ app.post('/booking', (req, res) => {
     .then((userId) => {
 
       Booking.create({
-        userId, ...details
+        user: userId, ...details
       })
         .then(() => res.json({message: "Booking successful"}))
-        .catch(() => {
+        .catch((err) => {
+          console.log(err)
           res.status(422).json({message: "Boooking failed"})
         })
 
@@ -297,7 +297,7 @@ app.get('/bookings', (req, res) => {
 
   processJWT(token)
     .then((userId) => {
-      Booking.find({ userId }).populate('placeId')
+      Booking.find({ user: userId }).populate('place')
         .then((bookings) => {
           res.json({bookings})
         })
@@ -318,7 +318,7 @@ app.get('/booking/:id', (req, res) => {
 
   processJWT(token)
     .then((userId) => {
-      Booking.find({ _id:id, userId }).populate('placeId')
+      Booking.find({ _id:id, user: userId }).populate('place')
         .then((booking) => {
           res.json({booking})
         })
@@ -328,4 +328,4 @@ app.get('/booking/:id', (req, res) => {
     )
 })
 
-app.listen(5000, () => console.log('Server listening on port 5000...')) 
+app.listen(5000, () => console.log('Server listening on port 5000...'))

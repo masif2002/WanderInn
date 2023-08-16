@@ -16,7 +16,7 @@ export default function Header() {
       {/* Logo and Brand*/}
       <Link to='/' className="flex items-center gap-1">
         <MdOutlineHotelClass className="h-8 w-8 text-primary" />
-        <h1 className="font-bold text-3xl">
+        <h1 className="font-bold text-3xl header-text">
           Wander<span className="text-primary">Inn</span>
         </h1>
       </Link>

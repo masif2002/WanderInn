@@ -13,24 +13,38 @@ import { BookingInfo } from '../components'
 
 export default function BookingsPage () {
     const [bookings, setBookings] = useState([])
+    const [fetching, setFetching] = useState(true)
 
     useEffect(() => {
         axios.get('/bookings')
           .then(({ data }) => {
             setBookings(data.bookings)
+            setFetching(false)
           })
     }, [])
+
+    if (fetching) {
+        return (
+            <h3 className="text-3xl text-center mt-20">Loading ....</h3> 
+        )
+    }
 
     return (
         <>
         {
-            bookings.length < 0 ? 
+            bookings.length < 1 ? 
             
-            <h1>No bookings found. See properties here</h1> 
+            <div>
+                <h3 className="text-3xl text-center mt-20">No bookings found</h3> 
+                <Link 
+                    to={'/'}
+                    className="mt-4 text-center bg-primary px-4 py-2 rounded-3xl max-w-xs mx-auto text-white block">Book properties here
+                </Link>
+            </div>
                 : 
             <div className="mx-auto max-w-sm md:max-w-3xl mt-12">
                 {
-                    bookings.map(({ _id: bookingId, placeId: { _id, title, photos}, checkIn, checkOut, guests, price }) => (
+                    bookings.map(({ _id: bookingId, place: { _id, title, photos}, checkIn, checkOut, guests, price }) => (
                         <Link
                             key={bookingId} 
                             to={`/profile/bookings/${bookingId}`} 

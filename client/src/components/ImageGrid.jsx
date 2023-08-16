@@ -49,10 +49,10 @@ const ImageGrid = ({ title, photos, address, children }) => {
           <div 
           onClick={() => setDisplayPhotos(true)}  
           className="mt-6 grid grid-cols-[2fr_1fr] gap-2 overflow-hidden rounded-3xl relative mx-auto ">
-            <img src={photos[0]} className='aspect-square object-cover cursor-pointer' alt="" />
-            <div>
-              <img src={photos[1]} alt="" className='aspect-square object-cover cursor-pointer' />
-              <img src={photos[2]} alt="" className='aspect-square object-cover relative top-2 cursor-pointer' />
+            <img src={photos[0]} className='aspect-square object-cover cursor-pointer h-full' alt="" />
+            <div className='grid grid-cols-1'>
+              <img src={photos[1]} alt="" className='aspect-square object-cover cursor-pointer h-full' />
+              <img src={photos[2]} alt="" className='aspect-square object-cover relative top-2 cursor-pointer h-full' />
             </div>
             <button 
               className="absolute bg-white rounded-2xl px-4 py-2 flex gap-2 items-center bottom-2 right-2 opacity-90 hover:opacity-100 text-sm cursor-pointer"

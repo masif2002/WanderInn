@@ -21,7 +21,7 @@ const HomePage = () => {
         <Link 
           key={place._id}
           to={`/place/${place._id}`} className='outline-none bg-white '>
-          <img src={place.photos[0]} className='rounded-t-3xl object-cover aspect-square' />
+          <img src={place.photos[0]} className='rounded-t-3xl object-cover aspect-square h-2/3 w-full' />
           <div className="py-4 px-6">
             <h3 className='text-lg font-medium truncate '>{place.address}</h3>
             <p className='text-sm text-gray-600 truncate font-light'>{place.title}</p>
