@@ -38,7 +38,6 @@ function processJWT(token) {
  
      if (!token) reject({ message: "Must be authenticated" })
  
- 
      jwt.verify(token, jwtSecret, (err, userInfo) => {
        
        if (err) reject({ message: "Invalid Token" })
@@ -52,7 +51,7 @@ function processJWT(token) {
  }
  
 app.get('/', (req, res) => {
-    res.json("Hello World")
+    res.json("WanderInn")
 })
 
 app.post('/register', async (req, res) => {
@@ -113,20 +112,21 @@ app.post('/login', async (req, res) => {
 app.get('/profile', async (req, res) => {
   const { token } = req.cookies
 
-  if(token) {
-    try {
-      const { _id } = jwt.verify(token, jwtSecret)
-      const { email, name } = await User.findById(_id)
-      
-      return res.json({ _id, name, email })
-  
-    } catch(err) {  
-      console.log(err)
-      return res.status(422).json({message: "Invalid Token"})
-    }
-  }
+  if (!token) 
+    return res.json(null) // If profile fetched for new user
 
-  return res.json(null)
+  processJWT(token)
+    .then((id) => {
+
+      User.findById(id)
+        .then(({ name, email }) => 
+          res.json({ id, name, email })
+        )
+
+    })
+    .catch((err) => 
+      res.status(401).json(err)
+    )
 
 })
 
@@ -184,67 +184,68 @@ app.post('/upload-photos', photosMiddleware.array('files[]'), (req, res) => {
 app.get('/myplace', async (req, res) => {
   const { token } = req.cookies
 
-  if (!token) return res.status(401).json({message: "Please log in!"})
+  processJWT(token)
+    .then((id) => {
+
+      Accomodation.find({ owner: id })
+        .then((places) => 
+          res.json(places)
+        )
+
+    })
+    .catch((err) => 
+      res.status(401).json(err)
+    )
   
-  let id;
-
-  try {
-    const {_id} = jwt.verify(token, jwtSecret)
-    id = _id
-  } catch (err) {
-    console.log(err)
-    return res.status(422).json({message: "Invalid Token"})
-  }
-
-  const places = await Accomodation.find({ owner: id })
-
-  return res.json(places)
-
-
 })
 
 app.post('/place', (req, res) => {
-  const { title, description, address, photos, perks, extraInfo, checkIn, checkOut, maxGuests, price} = req.body
-
+  const newPlaceDetails = req.body
   const { token } = req.cookies
-  if (!token) return res.status(401).json({message: "Please log in!"})
   
-  try {
-    var { _id } = jwt.verify(token, jwtSecret)
-  }
-  catch(err) {  
-    console.log(err)
-    return res.status(422).json({message: "Invalid Token"})
-  }
+  processJWT(token)
+    .then((id) => {
+      Accomodation.create({
+        ...newPlaceDetails, owner:id
+      })
+        .then((placeDoc) => 
+          res.json(placeDoc)
+        ) 
+        .catch(() => 
+          res.status(422).json({message: "Something went wrong!"})
+        )
+    })
+    .catch((err) => 
+      res.status(401).json(err)
+    )
 
-  const newPlace = new Accomodation({
-    owner:_id, title, description, address, photos, perks, extraInfo, checkIn, checkOut, maxGuests, price
-  })
-
-  newPlace.save()
-  .then((placeDoc) => res.json(placeDoc)) 
-  .catch((err) => {
-    console.log(err)
-    res.status(500).json({message: "Something went wrong!"})
-  })
 })
 
 app.put('/place', async (req, res) => {
-  const { id, title, description, address, photos, perks, extraInfo, checkIn, checkOut, maxGuests, price} = req.body
+  const { token } = req.cookies
+  const placeDetails = req.body // Contains place id
 
-  // Verify Token here 
-  await Accomodation.findByIdAndUpdate(
-    id, 
-    { title, description, address, photos, perks, extraInfo, checkIn, checkOut, maxGuests, price}
-  )
+  processJWT(token)
+    .then(() => {
 
-  res.json({message: 'Doc updated'})
+      Accomodation.findByIdAndUpdate(placeDetails.id, {...placeDetails})
+        .then(() => 
+          res.json({message: 'Place updated'})
+        )
+        .catch((err) =>
+          res.status(422).json({message: "Oops! Something went wrong!"})
+        )
+
+    })
+
+    .catch((err) => 
+      res.status(401).json(err)
+    )
 })
 
 
 app.get('/place/:id', async (req, res) => {
   const { id } = req.params
-  // Verify token logic goes here
 
   const placeDoc = await Accomodation.findById(id)
   return res.json({ placeDoc })
@@ -264,8 +265,6 @@ app.get('/places', (req, res) => {
     })
 
 })
-
-
 
 
 // Book a place
@@ -318,12 +317,11 @@ app.get('/booking/:id', (req, res) => {
   // So anyone can get booking details with just B_ID
 
   processJWT(token)
-    .then(() => {
-      Booking.findById(id).populate('placeId')
+    .then((userId) => {
+      Booking.find({ _id:id, userId }).populate('placeId')
         .then((booking) => {
           res.json({booking})
         })
-        // What if booking id not found
     })
     .catch((err) => 
       res.status(401).json(err)

@@ -9,7 +9,7 @@ const Accomodation = ({ place }) => {
   return (
     <Link
       to={`./${id}`} 
-      className="md:flex gap-5 md:p-8 bg-gray-200 rounded-2xl cursor-pointer overflow-hidden"
+      className="md:flex md:items-center gap-5 md:p-5 bg-gray-200 rounded-2xl cursor-pointer overflow-hidden"
     >
       <img src={photos[0]} alt="" className="md:h-32 w-full md:w-60 object-cover rounded-lg shrink-0" />
       <div className="p-6">

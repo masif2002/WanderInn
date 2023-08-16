@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
 import { useState } from "react"
 
@@ -40,31 +40,38 @@ const BookingDetailWidget = ({ checkIn, checkOut, guests, price }) => {
 
 export default function BookingDetails() {
     const { id } = useParams()
+    const navigate = useNavigate()
     const [details, setDetails] = useState(null)
 
     useEffect(() => {
         axios.get(`/booking/${id}`)
             .then(({ data }) => {
-                setDetails(data.booking)
+                if (data?.booking < 1) {
+                    alert("No booking found!")
+                    return
+                }
+                setDetails(data.booking[0])
             })
+            .catch((err) => 
+                alert(err.response.data.message)
+            )
     }, [])
     
    
 
     return (
-        <>
-            {
+        <>  
+            {   
                 details && (
-                <div className="max-w-sm sm:max-w-xl md:max-w-3xl mx-auto mt-16">
-                    <ImageGrid
-                        title={details.placeId.title}
-                        photos={details.placeId.photos}
-                        address={details.placeId.address}
-                        children={<BookingDetailWidget checkIn={details.checkIn} checkOut={details.checkOut} guests={details.guests} price={details.price} />}
-                    />
-                </div>
-
-                ) 
+                    <div className="max-w-sm sm:max-w-xl md:max-w-3xl mx-auto mt-16">
+                        <ImageGrid
+                            title={details.placeId.title}
+                            photos={details.placeId.photos}
+                            address={details.placeId.address}
+                            children={<BookingDetailWidget checkIn={details.checkIn} checkOut={details.checkOut} guests={details.guests} price={details.price} />}
+                        />
+                    </div>
+                )
             }
         </>
         

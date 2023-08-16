@@ -7,7 +7,6 @@ import { useContext } from 'react';
 import { UserContext } from '../context/UserContext';
 
 import { ImageGrid } from '../components'
-import differenceInDays from 'date-fns/differenceInDays'
 
 const InputField = ({ field, value, setValue, type, className }) => {
   return (
