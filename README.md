@@ -1,5 +1,7 @@
 # WanderInn
-* A MERN stack application to book hotels and places to stay. 
+* A MERN stack application to book hotels and places to stay.
+
+https://github.com/masif2002/WanderInn/assets/94846379/8db64585-52ce-4f6c-9434-1fa858fe7692
 
 ## Features
 * **JWT** Authentication
