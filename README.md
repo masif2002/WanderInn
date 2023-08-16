@@ -1,5 +1,5 @@
 # WanderInn
-A MERN Stack application to book hotels and places to stay. 
+* A MERN stack application to book hotels and places to stay. 
 
 ## Features
 * **JWT** Authentication
@@ -33,7 +33,7 @@ git clone https://github.com/masif2002/wanderinn
 ### 4. Add database connection URL 
 * [Create a MongoDB Database](https://www.mongodb.com/) for free and add your connnection url in the `.env` file
     ```
-    MONGO_CONNECTION_URL=mongodb+srv://yourdbname:yourdbpassword@yourhosteddburl/?retryWrites=true&w=majority
+    MONGO_CONNECTION_URL=mongodb+srv://yourdbname:yourdbpassword@yourhosteddburl
     JWT_SECRET_KEY=anysecretpassword
     ```
 ### 5. Launch the development server
