@@ -30,11 +30,12 @@ git clone https://github.com/masif2002/wanderinn
     MONGO_CONNECTION_URL
     JWT_SECRET_KEY
     ```
-### 4. [Create a MongoDB Database](https://www.mongodb.com/) for free and add your connnection url in the `.env` file
-```
-MONGO_CONNECTION_URL=mongodb+srv://dbname:dbpassword@hosteddburl/?retryWrites=true&w=majority
-JWT_SECRET_KEY=anysecretpassword
-```
+### 4. Add database connection URL 
+* [Create a MongoDB Database](https://www.mongodb.com/) for free and add your connnection url in the `.env` file
+    ```
+    MONGO_CONNECTION_URL=mongodb+srv://yourdbname:yourdbpassword@yourhosteddburl/?retryWrites=true&w=majority
+    JWT_SECRET_KEY=anysecretpassword
+    ```
 ### 5. Launch the development server
 * Server Side
     ```
