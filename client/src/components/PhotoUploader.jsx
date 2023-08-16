@@ -4,15 +4,21 @@ import { AiFillStar, AiOutlineStar } from 'react-icons/ai'
 import { BsTrash3Fill } from 'react-icons/bs'
 
 import axios from "axios";
-import { useEffect } from 'react';
+
+import BeatLoader from "react-spinners/BeatLoader";
+
+
+
 
 const PhotoUploader = ({ uploadedPhotos, setUploadedPhotos }) => {
 
     
     const [photoLink, setPhotoLink] = useState('')
+    const [uploading, setUploading] = useState(false)
 
     const addPhotoByLink = (ev) => {
         ev.preventDefault()
+        setUploading(true)
     
         axios.post('/upload-by-link', {link: photoLink})
         .then(({ data }) => {
@@ -24,10 +30,12 @@ const PhotoUploader = ({ uploadedPhotos, setUploadedPhotos }) => {
             alert("Oops! Something went wrong!")
             console.log(err);
         })
+        .finally(() => setUploading(false))
     
       }
     
     const uploadPhoto = async (ev) => {
+        setUploading(true)
         const { files } = ev.target
 
         axios.post('upload-photos', files)
@@ -39,6 +47,7 @@ const PhotoUploader = ({ uploadedPhotos, setUploadedPhotos }) => {
             console.log(err);
             alert("Something went wrong!")
         })
+        .finally(() => setUploading(false))
     }
 
     const removePhoto = (currentPhoto) => {
@@ -63,7 +72,16 @@ const PhotoUploader = ({ uploadedPhotos, setUploadedPhotos }) => {
                     onChange={(e) => setPhotoLink(e.target.value)}
                     value={photoLink}
                 />
-                <button className="bg-primary text-white rounded-tr-3xl rounded-br-3xl w-44" onClick={addPhotoByLink}>Add Photo</button>
+                <button className="bg-primary text-white rounded-tr-3xl rounded-br-3xl w-44" onClick={addPhotoByLink}>
+                    {!uploading && "Add Photo"} 
+                
+                    <BeatLoader 
+                        color={'white'} 
+                        loading={uploading}
+                        size={10}
+                    />
+
+                </button>
             </div>
 
 
@@ -87,9 +105,9 @@ const PhotoUploader = ({ uploadedPhotos, setUploadedPhotos }) => {
                 )}
                 
                 <label className="cursor-pointer flex flex-col md:flex-row justify-center items-center gap-2 border border-gray-400 rounded-3xl text-gray-800 min-h-[100px]">
-                    <input type="file" className="hidden" multiple onChange={uploadPhoto} />
+                    <input type="file" accept='image/*' className="hidden" multiple onChange={uploadPhoto} />
                     <FiUpload className="md:h-5 md:w-5"/>
-                    <p className=''>Upload Photos</p>
+                    <p >Upload Photos</p>
                 </label>
             </div>
          </div>
